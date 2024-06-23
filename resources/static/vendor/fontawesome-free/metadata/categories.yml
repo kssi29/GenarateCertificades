@@ -108,10 +108,10 @@ arrows:
     - level-down-alt
     - level-up-alt
     - location-arrow
-    - long-arrow-alt-down
-    - long-arrow-alt-left
-    - long-arrow-alt-right
-    - long-arrow-alt-up
+    - Long-arrow-alt-down
+    - Long-arrow-alt-left
+    - Long-arrow-alt-right
+    - Long-arrow-alt-up
     - mouse-pointer
     - play
     - random

@@ -8,7 +8,7 @@ public class CertificadoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long idcertificado;
+    private Long idcertificado;
 
     @ManyToOne
     @JoinColumn(name = "participante_id", referencedColumnName = "idpersona")
@@ -41,11 +41,11 @@ public class CertificadoModel {
         this.estado = estado;
     }
 
-    public long getIdcertificado() {
+    public Long getIdcertificado() {
         return idcertificado;
     }
 
-    public void setIdcertificado(long idcertificado) {
+    public void setIdcertificado(Long idcertificado) {
         this.idcertificado = idcertificado;
     }
 

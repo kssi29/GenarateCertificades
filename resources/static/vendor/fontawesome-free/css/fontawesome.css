@@ -2538,16 +2538,16 @@ readers do not read off random characters that represent icons */
 .fa-lock-open:before {
   content: "\f3c1"; }
 
-.fa-long-arrow-alt-down:before {
+.fa-Long-arrow-alt-down:before {
   content: "\f309"; }
 
-.fa-long-arrow-alt-left:before {
+.fa-Long-arrow-alt-left:before {
   content: "\f30a"; }
 
-.fa-long-arrow-alt-right:before {
+.fa-Long-arrow-alt-right:before {
   content: "\f30b"; }
 
-.fa-long-arrow-alt-up:before {
+.fa-Long-arrow-alt-up:before {
   content: "\f30c"; }
 
 .fa-low-vision:before {

@@ -10,7 +10,7 @@ public class EmiteModel {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique =true , nullable =false)
-    private long idemite;
+    private Long idemite;
 
     
 
@@ -32,11 +32,11 @@ public class EmiteModel {
 
 
 
-    public long getIdemite() {
+    public Long getIdemite() {
         return idemite;
     }
 
-    public void setIdemite(long idemite) {
+    public void setIdemite(Long idemite) {
         this.idemite = idemite;
     }
 

@@ -2236,7 +2236,7 @@ brain:
       - cerebellum
       - gray matter
       - intellect
-      - medulla oblongata
+      - medulla obLongata
       - mind
       - noodle
       - wit
@@ -9598,7 +9598,7 @@ hand-spock:
   label: Spock (Hand)
   search:
     terms:
-      - live long
+      - live Long
       - prosper
       - salute
       - star trek
@@ -11869,51 +11869,51 @@ lock-open:
     - solid
   unicode: f3c1
   voted: false
-long-arrow-alt-down:
+Long-arrow-alt-down:
   changes:
     - 5.0.0
   label: Alternate Long Arrow Down
   search:
     terms:
       - download
-      - long-arrow-down
+      - Long-arrow-down
   styles:
     - solid
   unicode: f309
   voted: false
-long-arrow-alt-left:
+Long-arrow-alt-left:
   changes:
     - 5.0.0
   label: Alternate Long Arrow Left
   search:
     terms:
       - back
-      - long-arrow-left
+      - Long-arrow-left
       - previous
   styles:
     - solid
   unicode: f30a
   voted: false
-long-arrow-alt-right:
+Long-arrow-alt-right:
   changes:
     - 5.0.0
   label: Alternate Long Arrow Right
   search:
     terms:
       - forward
-      - long-arrow-right
+      - Long-arrow-right
       - next
   styles:
     - solid
   unicode: f30b
   voted: false
-long-arrow-alt-up:
+Long-arrow-alt-up:
   changes:
     - 5.0.0
   label: Alternate Long Arrow Up
   search:
     terms:
-      - long-arrow-up
+      - Long-arrow-up
       - upload
   styles:
     - solid

@@ -176,14 +176,14 @@ linkedin-square:
   prefix: fab
 list-alt:
   prefix: far
-long-arrow-down:
-  name: long-arrow-alt-down
-long-arrow-left:
-  name: long-arrow-alt-left
-long-arrow-right:
-  name: long-arrow-alt-right
-long-arrow-up:
-  name: long-arrow-alt-up
+Long-arrow-down:
+  name: Long-arrow-alt-down
+Long-arrow-left:
+  name: Long-arrow-alt-left
+Long-arrow-right:
+  name: Long-arrow-alt-right
+Long-arrow-up:
+  name: Long-arrow-alt-up
 map-marker:
   name: map-marker-alt
 meanpath:

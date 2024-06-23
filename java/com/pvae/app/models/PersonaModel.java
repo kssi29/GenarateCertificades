@@ -16,7 +16,7 @@ public abstract class PersonaModel {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique =true , nullable =false)
-    private long idpersona;
+    private Long idpersona;
     private String paterno;
     private String materno;
     private String nombre;
@@ -36,11 +36,11 @@ public abstract class PersonaModel {
 
 
     
-    public long getIdpersona() {
+    public Long getIdpersona() {
         return idpersona;
     }
 
-    public void setIdpersona(long idpersona) {
+    public void setIdpersona(Long idpersona) {
         this.idpersona = idpersona;
     }
 

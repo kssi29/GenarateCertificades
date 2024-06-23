@@ -8101,7 +8101,7 @@ var core_scaleService = {
 	// Scale registration object. Extensions can register new scale types (such as log or DB scales) and then
 	// use the new chart options to grab the correct scale
 	constructors: {},
-	// Use a registration function so that we can move to an ES6 map when we no longer need to support
+	// Use a registration function so that we can move to an ES6 map when we no Longer need to support
 	// old browsers
 
 	// Scale config defaults
@@ -10822,7 +10822,7 @@ var core_helpers = function() {
 	helpers$1.fontString = function(pixelSize, fontStyle, fontFamily) {
 		return fontStyle + ' ' + pixelSize + 'px ' + fontFamily;
 	};
-	helpers$1.longestText = function(ctx, font, arrayOfThings, cache) {
+	helpers$1.LongestText = function(ctx, font, arrayOfThings, cache) {
 		cache = cache || {};
 		var data = cache.data = cache.data || {};
 		var gc = cache.garbageCollect = cache.garbageCollect || [];
@@ -10834,7 +10834,7 @@ var core_helpers = function() {
 		}
 
 		ctx.font = font;
-		var longest = 0;
+		var Longest = 0;
 		var ilen = arrayOfThings.length;
 		var i, j, jlen, thing, nestedThing;
 		for (i = 0; i < ilen; i++) {
@@ -10842,7 +10842,7 @@ var core_helpers = function() {
 
 			// Undefined strings and arrays should not be measured
 			if (thing !== undefined && thing !== null && helpers$1.isArray(thing) !== true) {
-				longest = helpers$1.measureText(ctx, data, gc, longest, thing);
+				Longest = helpers$1.measureText(ctx, data, gc, Longest, thing);
 			} else if (helpers$1.isArray(thing)) {
 				// if it is an array lets measure each element
 				// to do maybe simplify this function a bit so we can do this more recursively?
@@ -10850,7 +10850,7 @@ var core_helpers = function() {
 					nestedThing = thing[j];
 					// Undefined strings and arrays should not be measured
 					if (nestedThing !== undefined && nestedThing !== null && !helpers$1.isArray(nestedThing)) {
-						longest = helpers$1.measureText(ctx, data, gc, longest, nestedThing);
+						Longest = helpers$1.measureText(ctx, data, gc, Longest, nestedThing);
 					}
 				}
 			}
@@ -10863,18 +10863,18 @@ var core_helpers = function() {
 			}
 			gc.splice(0, gcLen);
 		}
-		return longest;
+		return Longest;
 	};
-	helpers$1.measureText = function(ctx, data, gc, longest, string) {
+	helpers$1.measureText = function(ctx, data, gc, Longest, string) {
 		var textWidth = data[string];
 		if (!textWidth) {
 			textWidth = data[string] = ctx.measureText(string).width;
 			gc.push(string);
 		}
-		if (textWidth > longest) {
-			longest = textWidth;
+		if (textWidth > Longest) {
+			Longest = textWidth;
 		}
-		return longest;
+		return Longest;
 	};
 
 	/**
@@ -11512,8 +11512,8 @@ var Scale = core_element.extend({
 		me.ticks = null;
 		me._labelSizes = null;
 		me._maxLabelLines = 0;
-		me.longestLabelWidth = 0;
-		me.longestTextCache = me.longestTextCache || {};
+		me.LongestLabelWidth = 0;
+		me.LongestTextCache = me.LongestTextCache || {};
 		me._gridLineItems = null;
 		me._labelItems = null;
 
@@ -11530,7 +11530,7 @@ var Scale = core_element.extend({
 		// Ticks - `this.ticks` is now DEPRECATED!
 		// Internal ticks are now stored as objects in the PRIVATE `this._ticks` member
 		// and must not be accessed directly from outside this class. `this.ticks` being
-		// around for long time and not marked as private, we can't change its structure
+		// around for Long time and not marked as private, we can't change its structure
 		// without unexpected breaking changes. If you need to access the scale ticks,
 		// use scale.getTicks() instead.
 
@@ -11933,8 +11933,8 @@ var Scale = core_element.extend({
 		var labelSizes = me._labelSizes;
 
 		if (!labelSizes) {
-			me._labelSizes = labelSizes = computeLabelSizes(me.ctx, parseTickFontOptions(me.options.ticks), me.getTicks(), me.longestTextCache);
-			me.longestLabelWidth = labelSizes.widest.width;
+			me._labelSizes = labelSizes = computeLabelSizes(me.ctx, parseTickFontOptions(me.options.ticks), me.getTicks(), me.LongestTextCache);
+			me.LongestLabelWidth = labelSizes.widest.width;
 		}
 
 		return labelSizes;
@@ -13456,7 +13456,7 @@ function getTickBackdropHeight(opts) {
 function measureLabelSize(ctx, lineHeight, label) {
 	if (helpers$1.isArray(label)) {
 		return {
-			w: helpers$1.longestText(ctx, ctx.font, label),
+			w: helpers$1.LongestText(ctx, ctx.font, label),
 			h: label.length * lineHeight
 		};
 	}
@@ -13507,7 +13507,7 @@ function fitWithPointLabels(scale) {
 	// from the shape radius to move the point inwards by that x.
 	//
 	// We average the left and right distances to get the maximum shape radius that can fit in the box
-	// along with labels.
+	// aLong with labels.
 	//
 	// Once we have that, we can find the centre point for the chart, by taking the x text protrusion
 	// on each side, removing that from the size, halving it and adding the left x protrusion width.
@@ -14037,7 +14037,7 @@ function getMax(options) {
  * to create the lookup table. The table ALWAYS contains at least two items: min and max.
  *
  * @param {number[]} timestamps - timestamps sorted from lowest to highest.
- * @param {string} distribution - If 'linear', timestamps will be spread linearly along the min
+ * @param {string} distribution - If 'linear', timestamps will be spread linearly aLong the min
  * and max range, so basically, the table will contains only two items: {min, 0} and {max, 1}.
  * If 'series', timestamps will be positioned at the same distance from each other. In this
  * case, only timestamps that break the time linearity are registered, meaning that in the
@@ -14332,7 +14332,7 @@ var defaultConfig$4 = {
 	position: 'bottom',
 
 	/**
-	 * Data distribution along the scale:
+	 * Data distribution aLong the scale:
 	 * - 'linear': data are spread according to their time (distances can vary),
 	 * - 'series': data are spread at the same distance from each other.
 	 * @see https://github.com/chartjs/Chart.js/pull/4507
@@ -14684,7 +14684,7 @@ var scale_time = core_scale.extend({
 		var timeOpts = me.options.time;
 		var displayFormats = timeOpts.displayFormats;
 
-		// pick the longest format (milliseconds) for guestimation
+		// pick the Longest format (milliseconds) for guestimation
 		var format = displayFormats[timeOpts.unit] || displayFormats.millisecond;
 		var exampleLabel = me.tickFormatFunction(exampleTime, 0, ticksFromTimestamps(me, [exampleTime], me._majorUnit), format);
 		var size = me._getLabelSize(exampleLabel);
@@ -15141,19 +15141,19 @@ var moment = createCommonjsModule(function (module, exports) {
         LLLL : 'dddd, MMMM D, YYYY h:mm A'
     };
 
-    function longDateFormat (key) {
-        var format = this._longDateFormat[key],
-            formatUpper = this._longDateFormat[key.toUpperCase()];
+    function LongDateFormat (key) {
+        var format = this._LongDateFormat[key],
+            formatUpper = this._LongDateFormat[key.toUpperCase()];
 
         if (format || !formatUpper) {
             return format;
         }
 
-        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
+        this._LongDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
             return val.slice(1);
         });
 
-        return this._longDateFormat[key];
+        return this._LongDateFormat[key];
     }
 
     var defaultInvalidDate = 'Invalid date';
@@ -15328,7 +15328,7 @@ var moment = createCommonjsModule(function (module, exports) {
         var i = 5;
 
         function replaceLongDateFormatTokens(input) {
-            return locale.longDateFormat(input) || input;
+            return locale.LongDateFormat(input) || input;
         }
 
         localFormattingTokens.lastIndex = 0;
@@ -15658,12 +15658,12 @@ var moment = createCommonjsModule(function (module, exports) {
         if (!this._monthsParse) {
             // this is not used
             this._monthsParse = [];
-            this._longMonthsParse = [];
+            this._LongMonthsParse = [];
             this._shortMonthsParse = [];
             for (i = 0; i < 12; ++i) {
                 mom = createUTC([2000, i]);
                 this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
-                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
+                this._LongMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
             }
         }
 
@@ -15672,7 +15672,7 @@ var moment = createCommonjsModule(function (module, exports) {
                 ii = indexOf.call(this._shortMonthsParse, llc);
                 return ii !== -1 ? ii : null;
             } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
+                ii = indexOf.call(this._LongMonthsParse, llc);
                 return ii !== -1 ? ii : null;
             }
         } else {
@@ -15681,10 +15681,10 @@ var moment = createCommonjsModule(function (module, exports) {
                 if (ii !== -1) {
                     return ii;
                 }
-                ii = indexOf.call(this._longMonthsParse, llc);
+                ii = indexOf.call(this._LongMonthsParse, llc);
                 return ii !== -1 ? ii : null;
             } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
+                ii = indexOf.call(this._LongMonthsParse, llc);
                 if (ii !== -1) {
                     return ii;
                 }
@@ -15703,7 +15703,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
         if (!this._monthsParse) {
             this._monthsParse = [];
-            this._longMonthsParse = [];
+            this._LongMonthsParse = [];
             this._shortMonthsParse = [];
         }
 
@@ -15713,8 +15713,8 @@ var moment = createCommonjsModule(function (module, exports) {
         for (i = 0; i < 12; i++) {
             // make the regex if we don't have it already
             mom = createUTC([2000, i]);
-            if (strict && !this._longMonthsParse[i]) {
-                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
+            if (strict && !this._LongMonthsParse[i]) {
+                this._LongMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
                 this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
             }
             if (!strict && !this._monthsParse[i]) {
@@ -15722,7 +15722,7 @@ var moment = createCommonjsModule(function (module, exports) {
                 this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
             }
             // test the regex
-            if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
+            if (strict && format === 'MMMM' && this._LongMonthsParse[i].test(monthName)) {
                 return i;
             } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
                 return i;
@@ -15818,24 +15818,24 @@ var moment = createCommonjsModule(function (module, exports) {
             return b.length - a.length;
         }
 
-        var shortPieces = [], longPieces = [], mixedPieces = [],
+        var shortPieces = [], LongPieces = [], mixedPieces = [],
             i, mom;
         for (i = 0; i < 12; i++) {
             // make the regex if we don't have it already
             mom = createUTC([2000, i]);
             shortPieces.push(this.monthsShort(mom, ''));
-            longPieces.push(this.months(mom, ''));
+            LongPieces.push(this.months(mom, ''));
             mixedPieces.push(this.months(mom, ''));
             mixedPieces.push(this.monthsShort(mom, ''));
         }
         // Sorting makes sure if one month (or abbr) is a prefix of another it
-        // will match the longer piece.
+        // will match the Longer piece.
         shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
+        LongPieces.sort(cmpLenRev);
         mixedPieces.sort(cmpLenRev);
         for (i = 0; i < 12; i++) {
             shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
+            LongPieces[i] = regexEscape(LongPieces[i]);
         }
         for (i = 0; i < 24; i++) {
             mixedPieces[i] = regexEscape(mixedPieces[i]);
@@ -15843,7 +15843,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
         this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
         this._monthsShortRegex = this._monthsRegex;
-        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._monthsStrictRegex = new RegExp('^(' + LongPieces.join('|') + ')', 'i');
         this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
     }
 
@@ -16248,7 +16248,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
         // behaves the same as moment#day except
         // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
-        // as a setter, sunday should belong to the previous week.
+        // as a setter, sunday should beLong to the previous week.
 
         if (input != null) {
             var weekday = parseIsoWeekday(input, this.localeData());
@@ -16324,30 +16324,30 @@ var moment = createCommonjsModule(function (module, exports) {
             return b.length - a.length;
         }
 
-        var minPieces = [], shortPieces = [], longPieces = [], mixedPieces = [],
-            i, mom, minp, shortp, longp;
+        var minPieces = [], shortPieces = [], LongPieces = [], mixedPieces = [],
+            i, mom, minp, shortp, Longp;
         for (i = 0; i < 7; i++) {
             // make the regex if we don't have it already
             mom = createUTC([2000, 1]).day(i);
             minp = this.weekdaysMin(mom, '');
             shortp = this.weekdaysShort(mom, '');
-            longp = this.weekdays(mom, '');
+            Longp = this.weekdays(mom, '');
             minPieces.push(minp);
             shortPieces.push(shortp);
-            longPieces.push(longp);
+            LongPieces.push(Longp);
             mixedPieces.push(minp);
             mixedPieces.push(shortp);
-            mixedPieces.push(longp);
+            mixedPieces.push(Longp);
         }
         // Sorting makes sure if one weekday (or abbr) is a prefix of another it
-        // will match the longer piece.
+        // will match the Longer piece.
         minPieces.sort(cmpLenRev);
         shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
+        LongPieces.sort(cmpLenRev);
         mixedPieces.sort(cmpLenRev);
         for (i = 0; i < 7; i++) {
             shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
+            LongPieces[i] = regexEscape(LongPieces[i]);
             mixedPieces[i] = regexEscape(mixedPieces[i]);
         }
 
@@ -16355,7 +16355,7 @@ var moment = createCommonjsModule(function (module, exports) {
         this._weekdaysShortRegex = this._weekdaysRegex;
         this._weekdaysMinRegex = this._weekdaysRegex;
 
-        this._weekdaysStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._weekdaysStrictRegex = new RegExp('^(' + LongPieces.join('|') + ')', 'i');
         this._weekdaysShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
         this._weekdaysMinStrictRegex = new RegExp('^(' + minPieces.join('|') + ')', 'i');
     }
@@ -16496,7 +16496,7 @@ var moment = createCommonjsModule(function (module, exports) {
 
     var baseConfig = {
         calendar: defaultCalendar,
-        longDateFormat: defaultLongDateFormat,
+        LongDateFormat: defaultLongDateFormat,
         invalidDate: defaultInvalidDate,
         ordinal: defaultOrdinal,
         dayOfMonthOrdinalParse: defaultDayOfMonthOrdinalParse,
@@ -18721,7 +18721,7 @@ var moment = createCommonjsModule(function (module, exports) {
     var proto$1 = Locale.prototype;
 
     proto$1.calendar        = calendar;
-    proto$1.longDateFormat  = longDateFormat;
+    proto$1.LongDateFormat  = LongDateFormat;
     proto$1.invalidDate     = invalidDate;
     proto$1.ordinal         = ordinal;
     proto$1.preparse        = preParsePostFormat;

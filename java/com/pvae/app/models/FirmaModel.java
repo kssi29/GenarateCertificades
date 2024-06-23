@@ -35,11 +35,11 @@ public class FirmaModel {
 
 
 
-    public long getIdfirma() {
+    public Long getIdfirma() {
         return idfirma;
     }
 
-    public void setIdfirma(long idfirma) {
+    public void setIdfirma(Long idfirma) {
         this.idfirma = idfirma;
     }
 

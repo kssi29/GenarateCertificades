@@ -21,7 +21,7 @@ public class UnidadModel {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique =true , nullable =false)
-    private long idunidad;
+    private Long idunidad;
     private String nombre;
 
     @OneToMany(mappedBy = "unidad", cascade = CascadeType.ALL)
@@ -57,11 +57,11 @@ public class UnidadModel {
     }
 
 
-    public long getIdunidad() {
+    public Long getIdunidad() {
         return idunidad;
     }
 
-    public void setIdunidad(long idunidad) {
+    public void setIdunidad(Long idunidad) {
         this.idunidad = idunidad;
     }
 

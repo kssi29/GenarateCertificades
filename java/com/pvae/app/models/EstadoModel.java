@@ -11,7 +11,7 @@ public class EstadoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long idestado;
+    private Long idestado;
     private String descripcion;
 
     @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL)
@@ -20,11 +20,11 @@ public class EstadoModel {
     public EstadoModel() {
     }
 
-    public long getIdestado() {
+    public Long getIdestado() {
         return idestado;
     }
 
-    public void setIdestado(long idestado) {
+    public void setIdestado(Long idestado) {
         this.idestado = idestado;
     }
 

@@ -829,16 +829,16 @@
   font-family: 'Font Awesome 5 Brands';
   font-weight: 400; }
 
-.fa.fa-long-arrow-down:before {
+.fa.fa-Long-arrow-down:before {
   content: "\f309"; }
 
-.fa.fa-long-arrow-up:before {
+.fa.fa-Long-arrow-up:before {
   content: "\f30c"; }
 
-.fa.fa-long-arrow-left:before {
+.fa.fa-Long-arrow-left:before {
   content: "\f30a"; }
 
-.fa.fa-long-arrow-right:before {
+.fa.fa-Long-arrow-right:before {
   content: "\f30b"; }
 
 .fa.fa-apple {

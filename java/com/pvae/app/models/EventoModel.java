@@ -18,7 +18,7 @@ public class EventoModel {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique =true , nullable =false)
-    private long idevento;
+    private Long idevento;
     private String nombre;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
@@ -53,12 +53,12 @@ public class EventoModel {
     }
 
 
-    public long getIdevento() {
+    public Long getIdevento() {
         return idevento;
     }
 
 
-    public void setIdevento(long idevento) {
+    public void setIdevento(Long idevento) {
         this.idevento = idevento;
     }
 

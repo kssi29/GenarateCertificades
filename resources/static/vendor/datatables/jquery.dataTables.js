@@ -3665,7 +3665,7 @@
 						nNewNode.className = sAttr;
 					}
 	
-					i += j; /* Move along the position array */
+					i += j; /* Move aLong the position array */
 				}
 	
 				insert.append( nNewNode );
@@ -9866,13 +9866,13 @@
 	
 		/**
 		 * When DataTables calculates the column widths to assign to each column,
-		 * it finds the longest string in each column and then constructs a
+		 * it finds the Longest string in each column and then constructs a
 		 * temporary table and reads the widths from that. The problem with this
-		 * is that "mmm" is much wider then "iiii", but the latter is a longer
+		 * is that "mmm" is much wider then "iiii", but the latter is a Longer
 		 * string - thus the calculation can go wrong (doing it properly and putting
 		 * it into an DOM object and measuring that is horribly(!) slow). Thus as
 		 * a "work around" we provide this option. It will append its value to the
-		 * text that is found to be the longest string for the column - i.e. padding.
+		 * text that is found to be the Longest string for the column - i.e. padding.
 		 *  @type string
 		 */
 		"sContentPadding": null,
@@ -12718,13 +12718,13 @@
 	
 		/**
 		 * When DataTables calculates the column widths to assign to each column,
-		 * it finds the longest string in each column and then constructs a
+		 * it finds the Longest string in each column and then constructs a
 		 * temporary table and reads the widths from that. The problem with this
-		 * is that "mmm" is much wider then "iiii", but the latter is a longer
+		 * is that "mmm" is much wider then "iiii", but the latter is a Longer
 		 * string - thus the calculation can go wrong (doing it properly and putting
 		 * it into an DOM object and measuring that is horribly(!) slow). Thus as
 		 * a "work around" we provide this option. It will append its value to the
-		 * text that is found to be the longest string for the column - i.e. padding.
+		 * text that is found to be the Longest string for the column - i.e. padding.
 		 * Generally you shouldn't need this!
 		 *  @type string
 		 *  @default <i>Empty string<i>
@@ -14170,7 +14170,7 @@
 		 * Note that DataTables v1.9- used this object slightly differently whereby
 		 * an object with two functions would be defined for each plug-in. That
 		 * ability is still supported by DataTables 1.10+ to provide backwards
-		 * compatibility, but this option of use is now decremented and no longer
+		 * compatibility, but this option of use is now decremented and no Longer
 		 * documented in DataTables 1.10+.
 		 *
 		 *  @type object
