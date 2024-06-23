@@ -23,6 +23,8 @@
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Listado de Unidades!</h6>
                             <a th:href="@{/consultas/unidades/crear}" class="btn btn-primary btn-sm">Agregar Unidad</a>
+                            <a th:href="@{/consultas/unidades/(format='pdf')}" class="btn btn-info" title="Exportar PDF" target="_blank">Exportar</a>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
