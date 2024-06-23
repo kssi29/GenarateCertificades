@@ -2,6 +2,10 @@ package com.pvae.app.models;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,24 +16,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "unidad")
+@Table(name = "unidad",
+       uniqueConstraints = {@UniqueConstraint(columnNames = {"nombre"})})
 public class UnidadModel {
 
-    @Id 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(unique =true , nullable =false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idunidad", unique = true, nullable = false)
     private Long idunidad;
-    private String nombre;
 
+    @Column(name = "nombre", unique = true, nullable = false)
+    @NotEmpty
+    private String nombre;
+   
     @OneToMany(mappedBy = "unidad", cascade = CascadeType.ALL)
     private List <EmiteModel> emites;
 
     @OneToMany(mappedBy = "unidadPadre", cascade = CascadeType.ALL)
     private List<UnidadModel> subunidades; 
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "unidad_padre_id")
     private UnidadModel unidadPadre;

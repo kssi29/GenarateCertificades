@@ -28,42 +28,66 @@
                                                             </div>
                                                             <form class="user" method="post"
                                                                   th:action="@{/consultas/unidades/guardar}"
-                                                                  th:object="${unidad}">
+                                                                  th:object="${unidad}"
+                                                                  onsubmit="return confirmEliminar()">
                                                                   <div class="form-group">
                                                                         <input type="hidden" th:field="*{idunidad}">
                                                                         <label for="nombre">Nombre de la Unidad</label>
                                                                         <input type="text"
                                                                               class="form-control form-control-user"
                                                                               th:field="*{nombre}"
-                                                                              placeholder="Nombre de la Unidad">
+                                                                              placeholder="Nombre de la Unidad"
+                                                                              required>
+                                                                        <small class="form-text text-danger"
+                                                                              th:if="${#fields.hasErrors('nombre')}"
+                                                                              th:errors="*{nombre}"></small>
                                                                   </div>
                                                                   <div class="form-group">
                                                                         <label for="unidadPadre">Pertenece</label>
                                                                         <select id="selectUnidadPadre"
                                                                               class="form-control form-control-user"
-                                                                              th:field="*{unidadPadre.idunidad}">
-                                                                              <option value="">Ninguno</option>
-                                                                              <!-- Esta opción representa "Ninguno" y enviará null -->
+                                                                              th:field="*{unidadPadre.idunidad}"
+                                                                              required>
+                                                                              <option value="">Selecciona una opción
+                                                                              </option>
                                                                               <option
                                                                                     th:each="unidadPadre : ${listaUnidades}"
                                                                                     th:value="${unidadPadre.idunidad}"
                                                                                     th:text="${unidadPadre.nombre}">
                                                                               </option>
                                                                         </select>
-                                                                        <!-- Muestra la opción seleccionada -->
-                                                                        <div th:if="${unidad.unidadPadre != null}">
-                                                                              <label>Pertenece: </label>
-                                                                              <span
-                                                                                    th:text="${unidad.unidadPadre.nombre}"></span>
-                                                                        </div>
+                                                                        <small class="text-danger"
+                                                                              th:if="${#fields.hasErrors('unidadPadre.idunidad')}"
+                                                                              th:errors="*{unidadPadre.idunidad}"></small>
                                                                   </div>
                                                                   <button type="submit"
                                                                         class="btn btn-primary btn-user btn-block">Guardar
                                                                         Unidad</button>
-                                                                  <!-- Botón Cancelar -->
                                                                   <a href="/consultas/unidades/"
                                                                         class="btn btn-secondary btn-user btn-block">Cancelar</a>
+                                                                   <p><br></p>
+                                                                  <div th:if="${error}" class="alert alert-danger">
+                                                                        <p th:text="${error}"></p>
+                                                                  </div>
+
                                                             </form>
+
+                                                            <script th:inline="javascript">
+                                                                  /*<![CDATA[*/
+                                                                  function confirmEliminar() {
+                                                                        var nombreUnidad = /*[[${unidad.nombre}]]*/ '';
+                                                                        if (nombreUnidad === 'Universidad Mayor de San Andrés') {
+                                                                              alert('No se puede eliminar la unidad \'Universidad Mayor de San Andrés\'.');
+                                                                              return false; // Cancela el envío del formulario
+                                                                        }
+                                                                        return true; // Continúa con el envío del formulario
+                                                                  }
+                                                                  /*]]>*/
+                                                            </script>
+
+
+
+
 
                                                       </div>
                                                 </div>

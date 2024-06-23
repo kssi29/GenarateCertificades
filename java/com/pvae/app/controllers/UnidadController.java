@@ -2,7 +2,10 @@ package com.pvae.app.controllers;
 
 import java.util.List;
 
+import javax.naming.Binding;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import javax.validation.Valid;
 
 import com.pvae.app.models.UnidadModel;
 import com.pvae.app.servicies.UnidadService;
@@ -28,7 +33,7 @@ public class UnidadController {
       }
 
       @GetMapping("/crear")
-      public String crearUnidad(Model model) {
+      public String crearUnidad(Model model, Long idunidad) {
             UnidadModel unidad = new UnidadModel();
             List<UnidadModel> listaUnidades = unidadService.listarUnidades();
             model.addAttribute("titulo", "Crear Unidad");
@@ -38,9 +43,28 @@ public class UnidadController {
       }
 
       @PostMapping("/guardar")
-      public String guardarUnidad(@ModelAttribute UnidadModel unidad) {
-            unidadService.guardarUnidad(unidad);
-            return "redirect:/consultas/unidades/";
+      public String guardarUnidad(@Valid @ModelAttribute("unidad") UnidadModel unidad, BindingResult bindingResult,
+                  Model model) {
+            List<UnidadModel> listaUnidades = unidadService.listarUnidades();
+            if (bindingResult.hasErrors()) {
+                  // Recarga la lista de unidades
+                  model.addAttribute("titulo", "Crear Unidad");
+                  model.addAttribute("unidad", unidad);
+                  model.addAttribute("listaUnidades", listaUnidades);
+                  return "consultas/unidades/crear";
+            }
+
+            try {
+                  unidadService.guardarUnidad(unidad);
+                  return "redirect:/consultas/unidades/";
+            } catch (DataIntegrityViolationException e) {
+                  // Capturar excepción de violación de restricción de unicidad
+                  model.addAttribute("titulo", "Crear Unidad");
+                  String errorMessage = "Ya existe una unidad con el nombre proporcionado.";
+                  model.addAttribute("listaUnidades", listaUnidades);
+                  model.addAttribute("error", errorMessage);
+                  return "consultas/unidades/crear";
+            }
       }
 
       @GetMapping("/editar/{id}")
@@ -53,10 +77,33 @@ public class UnidadController {
             return "consultas/unidades/crear";
       }
 
-      //te envia al listado de unidades
+      // te envia al listado de unidades
+      /* 
       @GetMapping("/eliminar/{id}")
       public String eliminarUnidad(@PathVariable("id") Long idunidad) {
             unidadService.eliminarUnidad(idunidad);
             return "redirect:/consultas/unidades/";
+      }*/
+
+      @GetMapping("/eliminar/{id}")
+      public String eliminarUnidad(@PathVariable("id") Long idunidad, Model model) {
+          try {
+              unidadService.eliminarUnidad(idunidad);
+              return "redirect:/consultas/unidades/";
+          } catch (IllegalArgumentException e) {
+              // Capturar excepción de unidad no eliminable
+              String errorMessage = "No se puede eliminar la unidad: " + e.getMessage();
+              model.addAttribute("error", errorMessage);
+              
+              // Cargar nuevamente la página de unidades con el mensaje de error
+              List<UnidadModel> listaUnidades = unidadService.listarUnidades();
+              model.addAttribute("titulo", "Lista de Unidades");
+              model.addAttribute("listaunidades", listaUnidades);
+              
+              return "consultas/unidades/unidad"; // Ajusta la vista según tu estructura
+          }
       }
+      
+
+
 }

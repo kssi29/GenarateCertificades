@@ -50,16 +50,26 @@
                                                 <a th:href="@{/consultas/unidades/editar/{idunidad}(idunidad=${unidad.idunidad})}"
                                                     class="btn btn-info btn-circle btn-sm">
                                                     <i class="fas fa-edit"></i>
-                                        
+
                                                 </a>
                                                 <a th:href="@{/consultas/unidades/eliminar/{idunidad}(idunidad=${unidad.idunidad})}"
                                                     class="btn btn-danger btn-circle btn-sm">
                                                     <i class="fas fa-trash"></i>
-                                                <!-- Aquí puedes añadir botones o enlaces para acciones adicionales -->
+
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                               
+                                <p><br></p>
+                                <!-- Muestra el mensaje de error si existe -->
+                                <div th:if="${error}" class="alert alert-danger">
+                                    <p th:text="${error}"></p>
+                                </div>
+
+                              
+                                  
+
                             </div>
                         </div>
                     </div>
