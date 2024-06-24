@@ -1,54 +1,63 @@
 .container {
       font-family: 'Times New Roman', Times, serif; /* Fuente formal */
-        width: 1010px;
-        /* Ancho del contenedor principal */
-        height: 640px;
-        margin: 0 auto;
-        /* Centrar el contenedor en la página */
-        text-align: center;
-        /* Alinear el texto al centro */
-        border: 1px solid #ccc;
-        /* Borde para visualización */
-        padding: 20px;
-        /* Espaciado interior */
+      width: 1010px;
+      /* Ancho del contenedor principal */
+      height: 640px;
+      margin: 0 auto;
+      /* Centrar el contenedor en la página */
+      text-align: center;
+      /* Alinear el texto al centro */
+      border: 1px solid #ccc;
+      /* Borde para visualización */
+      padding: 20px;
+      /* Espaciado interior */
   }
-
+  
+  .containerbac {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 1000px;
+      height: 600px;
+  }
+  
   .firmas {
-        margin-bottom: 20px;
+      margin-bottom: 20px;
   }
-
+  
   .firma {
-        text-align: center;
-        /* Alinear firma al centro */
-        margin-top: 20px;
-        /* Espacio uniforme entre cada firma */
-        box-sizing: border-box;
-        /* Incluir el borde en el ancho total */
+      text-align: center;
+      /* Alinear firma al centro */
+      margin-top: 20px;
+      /* Espacio uniforme entre cada firma */
+      box-sizing: border-box;
+      /* Incluir el borde en el ancho total */
   }
-
+  
   .firma img {
-        border-bottom: 1px solid #000;
-        max-width: 150px;
-        /* Ajustar la imagen al tamaño del contenedor */
-        height: auto;
-        /* Mantener la proporción de la imagen */
-        display: block;
-        /* Asegurar que la imagen sea un bloque para manejar el espacio correctamente */
-        margin: 0 auto;
-        /* Centrar la imagen */
+      border-bottom: 1px solid #000;
+      max-width: 150px;
+      /* Ajustar la imagen al tamaño del contenedor */
+      height: auto;
+      /* Mantener la proporción de la imagen */
+      display: block;
+      /* Asegurar que la imagen sea un bloque para manejar el espacio correctamente */
+      margin: 0 auto;
+      /* Centrar la imagen */
   }
-
+  
   .nombre-cargo {
-        font-size: 14px;
-        margin-top: 5px;
-        /* Espacio entre nombre/cargo y firma */
+      font-size: 14px;
+      margin-top: 5px;
+      /* Espacio entre nombre/cargo y firma */
   }
-
+  
   .nombre-cargo p {
-        margin: 0;
-        /* Eliminar el margen predeterminado de los párrafos */
+      margin: 0;
+      /* Eliminar el margen predeterminado de los párrafos */
   }
-
+  
   .fecha {
-        font-size: 18px;
+      font-size: 18px;
   }
+  

@@ -20,10 +20,13 @@ public class PruebaGenerarPDF {
             // Ejemplo de cómo podrías usar base64 para las imágenes
             String firma1Base64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\firma1.png");
             String firma2Base64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\firma2.png");
+            String fondoBase64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\plantilla.png");
+
 
             // Sustituye las etiquetas de imagen en el HTML con base64
             html = html.replace("{{firma1Placeholder}}", "data:image/png;base64," + firma1Base64);
             html = html.replace("{{firma2Placeholder}}", "data:image/png;base64," + firma2Base64);
+            html = html.replace("{{fondoPlaceholder}}", "data:image/png;base64," + fondoBase64);
 
             // Genera el PDF
             GeneraPDFUtil generaPDFUtil = new GeneraPDFUtil();
