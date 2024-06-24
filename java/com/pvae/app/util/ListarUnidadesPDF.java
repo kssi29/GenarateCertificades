@@ -3,7 +3,6 @@ package com.pvae.app.util;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map;
-//https://www.youtube.com/watch?v=732T97DQ1PQ
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
