@@ -1,6 +1,6 @@
 package com.pvae.app.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -13,22 +13,40 @@ public class ParticipanteModel extends PersonaModel{
     private String tipo;
     
     @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL)
-    private ArrayList<CertificadoModel> certificados;
+    private List<CertificadoModel> certificados;
 
     public ParticipanteModel() {
-        this.certificados = new ArrayList<>();
-    }
     
+    }
+
 
     public ParticipanteModel(String tipo, int ci, String email,  String materno, String nombre, String paterno) {
         super(ci, email,  materno, nombre, paterno);
         this.tipo = tipo;
     }
-    public ParticipanteModel(String tipo, int ci, String email,  String materno, String nombre, String paterno, ArrayList<CertificadoModel> certificados) {
+    public ParticipanteModel(String tipo, int ci, String email,  String materno, String nombre, String paterno, List<CertificadoModel> certificados) {
         super(ci, email,  materno, nombre, paterno);
         this.tipo = tipo;
         this.certificados = certificados;
         
+    }
+
+    public String getNombre(){
+        return super.getnombre();
+    }
+
+    public String getPaterno(){
+        return this.getpaterno();
+    }
+
+    public String getMaterno(){
+        return this.getmaterno();
+    }   
+    public int getCi(){
+        return this.getci();
+    }   
+    public String getEmail(){
+        return this.getemail();
     }
 
     
@@ -43,12 +61,12 @@ public class ParticipanteModel extends PersonaModel{
     }
 
 
-    public ArrayList<CertificadoModel> getCertificados() {
+    public List<CertificadoModel> getCertificados() {
         return certificados;
     }
 
 
-    public void setCertificados(ArrayList<CertificadoModel> certificados) {
+    public void setCertificados(List<CertificadoModel> certificados) {
         this.certificados = certificados;
     }
 
@@ -61,6 +79,7 @@ public class ParticipanteModel extends PersonaModel{
         certificados.remove(certificado);
         certificado.setParticipante(null);
     }
+    
 
     
 

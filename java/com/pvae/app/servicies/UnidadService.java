@@ -19,18 +19,11 @@ public class UnidadService {
             return (List<UnidadModel>) unidadRepository.findAll();
       }
 
-   /*    public UnidadModel guardarUnidad(UnidadModel unidad) {
-            return unidadRepository.save(unidad);
-      }*/
+
 
       public UnidadModel buscarUnidad(Long id) {
             return unidadRepository.findById(id).orElse(null);
       }     
-/* 
-      public void eliminarUnidad(Long id) {
-            unidadRepository.deleteById(id);
-      }
-            */
 
       @Transactional
       public void guardarUnidad(UnidadModel unidad) {

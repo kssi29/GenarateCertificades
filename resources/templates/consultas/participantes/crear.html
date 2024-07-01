@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="plantilla/plantilla :: head">
+      <script th:src="@{/js/custom.js}"></script>
+</head>
+
+<body>
+      <div id="wrapper">
+            <!-- Sidebar -->
+            <header th:replace="plantilla/plantilla :: sidebar"></header>
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                  <!-- Main Content -->
+                  <div id="content">
+                        <div class="container">
+                              <div class="card o-hidden border-0 shadow-lg my-5">
+                                    <div class="card-body p-0">
+                                          <div class="row justify-content-center">
+                                                <div class="col-lg-7">
+                                                      <div class="p-5">
+                                                            <div class="text-center">
+                                                                  <h1 class="h4 text-gray-900 mb-4" th:text="${titulo}">
+
+                                                                  </h1>
+                                                            </div>
+                                                            <form class="user" method="post"
+                                                                  th:action="@{/consultas/participantes/guardar}"
+                                                                  th:object="${participante}">
+                                                                  <div class="form-group">
+                                                                        <input type="hidden" th:field="*{idpersona}">
+                                                                        <label for="paterno">Apellido Paterno</label>
+                                                                        <input type="text"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{paterno}"
+                                                                              placeholder="Apellido Paterno"
+                                                                              required>
+                                                                        <label for="materno">Apellido Materno</label>
+                                                                         <input type="text"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{materno}"
+                                                                              placeholder="Apellido Materno"
+                                                                              required>
+                                                                        <label for="nombre">Nombre</label>
+                                                                        <input type="text"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{nombre}"
+                                                                              placeholder="Nombre"
+                                                                              required>
+                                                                        <label for="correo">Correo</label>  
+                                                                        <input type="email"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{email}"
+                                                                              placeholder="Correo"
+                                                                              required>
+                                                                        <label for="ci">CI</label>    
+                                                                        <input type="text"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{ci}"
+                                                                              placeholder="CI"
+                                                                              required>         
+                                                                        <label for="tipo">Tipo</label>
+                                                                        <select id="selectTipo"
+                                                                              class="form-control form-control-user"
+                                                                              th:field="*{tipo}"
+                                                                              required>
+                                                                              <option value="">Selecciona una opción
+                                                                              </option>
+                                                                              <option value="1">Participante</option>
+                                                                              <option value="2">Organizador</option>
+
+                                                                        </select>      
+                                                                        
+
+                                                                  
+                                                                            
+                                                                       
+                                                                  </div>
+                                                                  <button type="submit"
+                                                                        class="btn btn-primary btn-user btn-block">Guardar
+                                                            </button>
+                                                                  <a href="/consultas/participantes/"
+                                                                        class="btn btn-secondary btn-user btn-block">Cancelar</a>
+                                                                   <p><br></p>
+                                                                  <div th:if="${error}" class="alert alert-danger">
+                                                                        <p th:text="${error}"></p>
+                                                                  </div>
+                                                            </form>
+
+
+
+
+
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <!-- End of Main Content -->
+
+                  <!-- Footer -->
+                  <footer th:replace="plantilla/plantilla :: footer"></footer>
+                  <!-- End of Footer -->
+            </div>
+            <!-- End of Content Wrapper -->
+      </div>
+      <!-- End of Page Wrapper -->
+
+
+</body>
+
+</html>

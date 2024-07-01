@@ -16,13 +16,12 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <br>
-                 
-
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
                             <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
-                            <a th:href="@{/consultas/unidades/crear}" class="btn btn-primary btn-sm">Agregar Unidad</a>
-                            <a th:href="@{/consultas/unidades/(format='pdf')}" class="btn btn-info" title="Exportar PDF" target="_blank">Exportar</a>
+                            <a th:href="@{/consultas/estados/crear}" class="btn btn-primary btn-sm">Agregar</a>
+                            <a th:href="@{/consultas/unidades/(format='pdf')}" class="btn btn-info" title="Exportar PDF"
+                                target="_blank">Exportar</a>
 
                         </div>
                         <div class="card-body">
@@ -31,49 +30,48 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Pertenece</th>
+                                            <th>Descripcion</th>
                                             <th>Acciones</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!-- Iterar sobre cada unidad y mostrar en la tabla -->
-                                        <tr th:each="unidad : ${listaunidades}">
-                                            <td th:text="${unidad.idunidad}"></td>
-                                            <td th:text="${unidad.nombre}"></td>
-                                            <td
-                                                th:text="${unidad.unidadPadre != null ? unidad.unidadPadre.nombre : '0'}">
-                                            </td>
-
-
+                                        <tr th:each="entidad : ${listaestados}">
+                                            <td th:text="${entidad.idestado}"></td>
+                                            <td th:text="${entidad.descripcion}"></td>
 
                                             <td>
-                                                <a th:href="@{/consultas/unidades/editar/{idunidad}(idunidad=${unidad.idunidad})}"
+                                                <a th:href="@{/consultas/estados/editar/{idestado}(idestado=${entidad.idestado})}"
                                                     class="btn btn-info btn-circle btn-sm">
                                                     <i class="fas fa-edit"></i>
 
                                                 </a>
-                                                <a th:href="@{/consultas/unidades/eliminar/{idunidad}(idunidad=${unidad.idunidad})}"
+                                                <a th:href="@{/consultas/estados/eliminar/{idestado}(idestado=${entidad.idestado})}"
                                                     class="btn btn-danger btn-circle btn-sm">
                                                     <i class="fas fa-trash"></i>
+                                                </a>
+
 
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                               
+
                                 <p><br></p>
                                 <!-- Muestra el mensaje de error si existe -->
                                 <div th:if="${error}" class="alert alert-danger">
                                     <p th:text="${error}"></p>
                                 </div>
 
-                              
-                                  
+
+
 
                             </div>
                         </div>
                     </div>
+
+
 
                 </div>
                 <!-- /.container-fluid -->

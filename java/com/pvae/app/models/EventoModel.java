@@ -25,7 +25,7 @@ public class EventoModel {
     private List<FirmaModel> firmas = new ArrayList<>();
 
      @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private ArrayList<CertificadoModel> certificados = new ArrayList<>();;
+    private List<CertificadoModel> certificados = new ArrayList<>();;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List <EmiteModel> emites = new ArrayList<>();;
@@ -46,7 +46,7 @@ public class EventoModel {
         this.certificados = certificados;
     }
 
-    public EventoModel(ArrayList<CertificadoModel> certificados, List<EmiteModel> emites, String nombre) {
+    public EventoModel(List<CertificadoModel> certificados, List<EmiteModel> emites, String nombre) {
         this.certificados = certificados;
         this.emites = emites;
         this.nombre = nombre;
@@ -83,12 +83,12 @@ public class EventoModel {
     }
 
 
-    public ArrayList<CertificadoModel> getCertificados() {
+    public List<CertificadoModel> getCertificados() {
         return certificados;
     }
 
 
-    public void setCertificados(ArrayList<CertificadoModel> certificados) {
+    public void setCertificados(List<CertificadoModel> certificados) {
         this.certificados = certificados;
     }
 

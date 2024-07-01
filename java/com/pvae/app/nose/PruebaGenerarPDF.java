@@ -14,10 +14,10 @@ public class PruebaGenerarPDF {
         String htmlFilePath = "C:\\workspace\\app\\src\\main\\resources\\templates\\generaCertificados\\prueba.html";
 
         try {
-            // Lee el contenido del archivo HTML
+     
             String html = new String(Files.readAllBytes(Paths.get(htmlFilePath)));
 
-            // Ejemplo de cómo podrías usar base64 para las imágenes
+         
             String firma1Base64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\firma1.png");
             String firma2Base64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\firma2.png");
             String fondoBase64 = ImageUtil.encodeImageToBase64("C:\\workspace\\app\\src\\main\\resources\\static\\img\\recursosCert\\plantilla.png");

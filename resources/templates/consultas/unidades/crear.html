@@ -106,23 +106,7 @@
       </div>
       <!-- End of Page Wrapper -->
 
-      <script th:inline="javascript">
-            /* JavaScript para actualizar dinámicamente el nombre de la unidad seleccionada */
-            var selectUnidadPadre = document.getElementById('selectUnidadPadre');
-            var unidadPadreSeleccionada = document.getElementById('unidadPadreSeleccionada');
-
-            // Escuchar el evento de cambio en el select
-            selectUnidadPadre.addEventListener('change', function () {
-                  var selectedOption = this.options[this.selectedIndex];
-                  unidadPadreSeleccionada.textContent = selectedOption.text;
-            });
-
-            // Actualizar el campo al cargar la página si hay una selección previa
-            document.addEventListener('DOMContentLoaded', function () {
-                  var selectedOption = selectUnidadPadre.options[selectUnidadPadre.selectedIndex];
-                  unidadPadreSeleccionada.textContent = selectedOption.text;
-            });
-      </script>
+    
 </body>
 
 </html>

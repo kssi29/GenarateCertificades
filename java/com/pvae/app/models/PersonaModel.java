@@ -52,35 +52,35 @@ public abstract class PersonaModel {
         this.paterno = paterno;
     }
 
-    public String getMaterno() {
+    public String getmaterno() {
         return materno;
     }
 
-    public void setMaterno(String materno) {
+    public void setmaterno(String materno) {
         this.materno = materno;
     }
 
-    public String getNombre() {
+    public String getnombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setnombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getEmail() {
+    public String getemail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setemail(String email) {
         this.email = email;
     }
 
-    public int getCi() {
+    public int getci() {
         return ci;
     }
 
-    public void setCi(int ci) {
+    public void setci(int ci) {
         this.ci = ci;
     }
 
