@@ -23,11 +23,11 @@
 
                         </div>
                         <div style="margin-left: 30px;">
-                            <form th:action="@{/subirArchivo/excel}" method="post" enctype="multipart/form-data">
+                            <form action="/subirArchivo/excel" method="post" enctype="multipart/form-data">
                                 <input type="file" name="archivo" accept=".xls,.xlsx">
-                                <button type="submit" class="btn btn-info" title="Subir Participantes">Subir
-                                    Excel</button>
+                                <button type="submit" class="btn btn-info">Subir Excel</button>
                             </form>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

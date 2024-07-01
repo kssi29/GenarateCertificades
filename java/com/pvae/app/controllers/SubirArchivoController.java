@@ -1,5 +1,6 @@
 package com.pvae.app.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,20 +13,18 @@ import com.pvae.app.servicies.SubirArchivoService;
 @RequestMapping("/subirArchivo")
 public class SubirArchivoController {
       private final SubirArchivoService subirArchivoService;
-      
 
       public SubirArchivoController(SubirArchivoService subirArchivoService) {
             this.subirArchivoService = subirArchivoService;
       }
 
       @PostMapping("/excel")
-      public String manejaSubidaExcel(@RequestParam("archivo") MultipartFile archivo) {
-            if(!archivo.isEmpty()) {
-                  return subirArchivoService.procesarExcel(archivo);
-            } else {
-                  return "Archivo vacío";
+      public ResponseEntity<String> manejaSubidaExcel(@RequestParam("archivo") MultipartFile archivo) {
+            if (archivo.isEmpty()) {
+                  return ResponseEntity.badRequest().body("Archivo vacío");
             }
+            String resultadoProcesamiento = subirArchivoService.procesarYGuardarExcel(archivo);
+            return ResponseEntity.ok(resultadoProcesamiento);
       }
 
-      
 }

@@ -1,6 +1,6 @@
 package com.pvae.app.controllers;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.pvae.app.models.ParticipanteModel;
-import com.pvae.app.models.PersonaModel;
+
 import com.pvae.app.servicies.ParticipanteService;
-import com.pvae.app.servicies.PersonaService;
+
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +28,8 @@ public class ParticipanteController {
       private ParticipanteService participanteService;
 
 
+
+      
       @GetMapping("/")
       public String listarParticipantes(Model model) {
             List<ParticipanteModel> listaParticipantes = participanteService.listarParticipantes();
