@@ -1,8 +1,5 @@
 package com.pvae.app.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -14,9 +11,10 @@ public class EstadoModel {
     private Long idestado;
     private String descripcion;
 
-    @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL)
-    private List<CertificadoModel> certificados = new ArrayList<>();;
-
+    /*
+     * @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL)
+     * private List<CertificadoModel> certificados = new ArrayList<>();;
+     */
     public EstadoModel() {
     }
 
@@ -35,13 +33,14 @@ public class EstadoModel {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
-    public List<CertificadoModel> getCertificados() {
-        return certificados;
-    }
-
-    public void setCertificados(List<CertificadoModel> certificados) {
-        this.certificados = certificados;
-    }
+    /*
+     * public List<CertificadoModel> getCertificados() {
+     * return certificados;
+     * }
+     * 
+     * public void setCertificados(List<CertificadoModel> certificados) {
+     * this.certificados = certificados;
+     * }
+     */
 
 }

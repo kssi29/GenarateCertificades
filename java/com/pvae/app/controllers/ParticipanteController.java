@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ParticipanteController {
       @Autowired
       private ParticipanteService participanteService;
+    
 
 
 
@@ -78,4 +79,5 @@ public class ParticipanteController {
             return "redirect:/consultas/participantes/";
       }
 
+   
 }

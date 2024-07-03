@@ -17,10 +17,13 @@ public class CertificadoModel {
     @ManyToOne
     @JoinColumn(name = "evento_id", referencedColumnName = "idevento")
     private EventoModel evento;
-
-    @ManyToOne
+/*
+ * 
+ * @ManyToOne
     @JoinColumn(name = "estado_id", referencedColumnName = "idestado")
     private EstadoModel estado;
+ */
+    
 
       public CertificadoModel() {
     }
@@ -30,16 +33,18 @@ public class CertificadoModel {
         this.evento = evento;
     }
 
-    public CertificadoModel(ParticipanteModel participante, EstadoModel estado) {
+    public CertificadoModel(ParticipanteModel participante ){//, EstadoModel estado) {
         this.participante = participante;
-        this.estado = estado;
+    //    this.estado = estado;
     }
-
-    public CertificadoModel(ParticipanteModel participante, EventoModel evento, EstadoModel estado) {
+/* 
+ * public CertificadoModel(ParticipanteModel participante, EventoModel evento , EstadoModel estado) {
         this.participante = participante;
         this.evento = evento;
         this.estado = estado;
     }
+*/
+    
 
     public Long getIdcertificado() {
         return idcertificado;
@@ -65,6 +70,7 @@ public class CertificadoModel {
         this.evento = evento;
     }
 
+    /* 
     public EstadoModel getEstado() {
         return estado;
     }
@@ -72,6 +78,6 @@ public class CertificadoModel {
     public void setEstado(EstadoModel estado) {
         this.estado = estado;
     }
-
+*/
 
 }

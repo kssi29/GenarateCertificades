@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.pvae.app.models.EventoModel;
+import com.pvae.app.models.ParticipanteModel;
+import com.pvae.app.repositories.CertificadoRepository;
 import com.pvae.app.servicies.EventoService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-// @RequestMapping("/consultas/eventos")
 public class HomeController {
 
     @Autowired
     private EventoService eventoService;
+
+    @Autowired
+    private CertificadoRepository certificadoRepository;
 
     @GetMapping("/")
     public String listarEventos(Model model) {
@@ -82,6 +87,14 @@ public class HomeController {
     public String eliminarUnidad(@PathVariable("id") Long idevento, Model model) {
         eventoService.eliminarEvento(idevento);
         return "redirect:/";
+    }
+
+    @GetMapping("/listarParticipantesPorEvento/{id}")
+    public String listarParticipantesPorEvento(@PathVariable("id") Long eventoId, Model model) {
+        List<ParticipanteModel> listaParticipantes = certificadoRepository.findParticipantesByEventoId(eventoId);
+        model.addAttribute("titulo", "Listado de Participantes para el evento "+eventoId);
+        model.addAttribute("listaparticipantes", listaParticipantes);
+        return "consultas/participantes/participante";
     }
 
 }

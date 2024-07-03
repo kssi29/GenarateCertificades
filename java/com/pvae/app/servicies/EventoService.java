@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pvae.app.models.EventoModel;
+
 import com.pvae.app.repositories.EventoRepository;
 
 import jakarta.transaction.Transactional;
@@ -17,16 +18,31 @@ public class EventoService {
       public List<EventoModel> listarEventos() {
             return (List<EventoModel>) eventoRepository.findAll();
       }
+
       public EventoModel buscarEvento(Long id) {
             return eventoRepository.findById(id).orElse(null);
       }
+
       @Transactional
       public void guardarEvento(EventoModel evento) {
-          eventoRepository.save(evento);
+            eventoRepository.save(evento);
       }
+
       @Transactional
-      public void eliminarEvento(Long idevento){
+      public void eliminarEvento(Long idevento) {
             eventoRepository.deleteById(idevento);
       }
-      
+
+      /*
+       * @Transactional
+       * public void agregarParticipante(Long eventoId, ParticipanteModel
+       * participante) {
+       * EventoModel evento = eventoRepository.findById(eventoId)
+       * .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+       * 
+       * // Crear y guardar el certificado asociado al participante y evento
+       * certificadoService.guardarCertificado(evento, participante);
+       * }
+       */
+
 }

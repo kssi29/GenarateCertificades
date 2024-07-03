@@ -22,11 +22,13 @@ public class EventoModel {
     private String nombre;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List<FirmaModel> firmas = new ArrayList<>();
-
-     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<CertificadoModel> certificados = new ArrayList<>();;
 
+
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    private List<FirmaModel> firmas = new ArrayList<>();
+
+     
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List <EmiteModel> emites = new ArrayList<>();;
 

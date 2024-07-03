@@ -2,9 +2,8 @@ package com.pvae.app.servicies;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pvae.app.models.EventoModel;
 import com.pvae.app.models.ParticipanteModel;
 
 import jakarta.transaction.Transactional;
@@ -26,23 +26,31 @@ public class SubirArchivoService {
     @Autowired
     private ParticipanteService participanteService;
 
+    @Autowired
+    private EventoService eventoService;
+
+    @Autowired
+    private CertificadoService certificadoService;
+    
+
+
     @Transactional
-    public String procesarYGuardarExcel(MultipartFile archivo) {
+    public String procesarYGuardarExcel(MultipartFile archivo, Long eventoId) {
         try {
+            EventoModel evento = eventoService.buscarEvento(eventoId);
+            if (evento == null) {
+                throw new RuntimeException("Evento no encontrado");
+            }
+
             InputStream inputStream = archivo.getInputStream();
-
             Workbook workbook = WorkbookFactory.create(inputStream);
-
             Sheet sheet = workbook.getSheetAt(0);
-
             Iterator<Row> iterator = sheet.iterator();
 
+            // Saltar la primera fila si es un encabezado
             if (iterator.hasNext()) {
                 iterator.next();
             }
-
-            // List para almacenar los participantes a guardar en la base de datos
-            List<ParticipanteModel> participantes = new ArrayList<>();
 
             while (iterator.hasNext()) {
                 Row currentRow = iterator.next();
@@ -55,22 +63,22 @@ public class SubirArchivoService {
                 String nombre = cellIterator.next().getStringCellValue(); // NOMBRE
                 int tipo = (int) cellIterator.next().getNumericCellValue(); // TIPO
 
-                ParticipanteModel participante = new ParticipanteModel(String.valueOf(tipo), ci, email, materno, nombre,
-                        paterno);
-                participantes.add(participante);
-            }
+                // Buscar o crear el participante
+                ParticipanteModel participante = participanteService.obtenerOPersistirParticipante(ci, email, paterno, materno, nombre, String.valueOf(tipo));
 
-            for (ParticipanteModel participante : participantes) {
-                participanteService.guardarParticipante(participante);
+                // Crear y guardar el certificado asociado al participante y evento
+                certificadoService.guardarCertificado(evento, participante);
             }
 
             workbook.close();
+            inputStream.close();
 
-            return "Se han guardado exitosamente los participantes desde el archivo Excel "
-                    + archivo.getOriginalFilename();
+            return "Se han guardado exitosamente los participantes desde el archivo Excel para el evento con id " + eventoId;
         } catch (IOException | EncryptedDocumentException ex) {
-            return "Error al procesar el archivo: " + ex.getMessage();
+            return "Error al procesar el archivo Excel: " + ex.getMessage();
         }
     }
+
+   
 
 }
