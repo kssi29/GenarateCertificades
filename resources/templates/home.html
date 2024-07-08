@@ -23,9 +23,11 @@
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
                             <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
                             <a th:href="@{/crear}" class="btn btn-primary btn-sm">Agregar Evento</a>
-                    
+
 
                         </div>
+
+                 
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
@@ -41,59 +43,81 @@
                                         <td th:text="${evento.nombre}"></td>
                                         <td>
                                             <!-- Botón para editar evento -->
-                                            <a th:href="@{/editar/{idevento}(idevento=${evento.idevento})}" class="btn btn-info btn-circle btn-sm">
+                                            <a th:href="@{/editar/{idevento}(idevento=${evento.idevento})}"
+                                                class="btn btn-info btn-circle btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            
+
                                             <!-- Botón para eliminar evento -->
-                                            <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}" class="btn btn-danger btn-circle btn-sm">
+                                            <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}"
+                                                class="btn btn-danger btn-circle btn-sm">
                                                 <i class="fas fa-trash"></i>
                                             </a>
-                                            
+
                                             <!-- Formulario para agregar participantes -->
-                                            <form action="/subirArchivo/excel" method="post" enctype="multipart/form-data">
+                                            <form action="/subirArchivo/excel" method="post"
+                                                enctype="multipart/form-data">
                                                 <input type="file" name="archivo" accept=".xls,.xlsx">
                                                 <input type="hidden" name="eventoId" th:value="${evento.idevento}">
                                                 <button type="submit" class="btn btn-primary btn-circle btn-sm">
-                                                    <i class="fas fa-user-plus"></i> 
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                            </form>
+
+                                           
+                                            <!-- Botón para subir imagen -->
+                                            <form action="/subirArchivo/imagen" method="post" enctype="multipart/form-data">
+                                                <input type="file" name="imagen" accept="image/*">
+                                                <input type="hidden" name="eventoId" th:value="${evento.idevento}">
+                                                <button type="submit" class="btn btn-warning btn-circle btn-sm">
+                                                    <i class="fas fa-image"></i> 
                                                 </button>
                                             </form>
                                             
-                                            <!-- Enlace para listar participantes por evento -->
-                                            <a th:href="@{/listarParticipantesPorEvento/{id}(id=${evento.idevento})}" class="btn btn-success btn-circle btn-sm">
-                                                <i class="fas fa-list"></i> 
+                                             <!-- Enlace para listar participantes por evento -->
+                                             <a th:href="@{/listarParticipantesPorEvento/{id}(id=${evento.idevento})}"
+                                             class="btn btn-success btn-circle btn-sm">
+                                             <i class="fas fa-list"></i>
+                                         </a>
+
+                                            <!-- Botón para generar certificados -->
+                                            <a th:href="@{/generarCertificados/{eventoId}(eventoId=${evento.idevento})}"
+                                                class="btn btn-primary btn-circle btn-sm">
+                                                <i class="fas fa-certificate"></i> 
                                             </a>
+
+
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                            
-                                <p><br></p>
-                                <!-- Muestra el mensaje de error si existe -->
-                                <div th:if="${error}" class="alert alert-danger">
-                                    <p th:text="${error}"></p>
-                                </div>
 
-
-
-
-                            </div>
+                        <p><br></p>
+                        <!-- Muestra el mensaje de error si existe -->
+                        <div th:if="${error}" class="alert alert-danger">
+                            <p th:text="${error}"></p>
                         </div>
+
+
+
+
                     </div>
-
-
-
                 </div>
-                <!-- /.container-fluid -->
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer th:replace="plantilla/plantilla :: footer"></footer>
-            <!-- End of Footer -->
+
+
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer th:replace="plantilla/plantilla :: footer"></footer>
+    <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
 

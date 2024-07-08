@@ -1,13 +1,14 @@
 package com.pvae.app.nose;
-
+/* 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.pvae.app.util.GeneraPDFUtil;
 import com.pvae.app.util.ImageUtil;
-
+*/
 public class PruebaGenerarPDF {
+    /*
 
     public static void main(String[] args) {
         // Ruta del archivo HTML en tu proyecto
@@ -30,12 +31,13 @@ public class PruebaGenerarPDF {
 
             // Genera el PDF
             GeneraPDFUtil generaPDFUtil = new GeneraPDFUtil();
-            String resultado = generaPDFUtil.generarPDF(html);
-            System.out.println(resultado);
+       //     String resultado = generaPDFUtil.generarPDF(html);
+        //    System.out.println(resultado);
 
         } catch (IOException e) {
             // Manejo de errores al leer el archivo HTML
             e.printStackTrace();
         }
     }
+         */
 }

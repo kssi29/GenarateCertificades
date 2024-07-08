@@ -1,4 +1,5 @@
 package com.pvae.app.util;
+/* 
 
 import java.awt.Color;
 import java.util.List;
@@ -22,7 +23,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component("consultas/unidades/unidad")
-public class ListarUnidadesPDF extends AbstractPdfView {
+*/
+public class ListarUnidadesPDF {
+//extends AbstractPdfView {
+      /* 
       @Override
       protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
                   HttpServletRequest request,
@@ -65,5 +69,6 @@ public class ListarUnidadesPDF extends AbstractPdfView {
 
             document.add(tabla);
       }
+            */
 
 }

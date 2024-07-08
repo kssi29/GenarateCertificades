@@ -33,16 +33,5 @@ public class EventoService {
             eventoRepository.deleteById(idevento);
       }
 
-      /*
-       * @Transactional
-       * public void agregarParticipante(Long eventoId, ParticipanteModel
-       * participante) {
-       * EventoModel evento = eventoRepository.findById(eventoId)
-       * .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
-       * 
-       * // Crear y guardar el certificado asociado al participante y evento
-       * certificadoService.guardarCertificado(evento, participante);
-       * }
-       */
 
 }

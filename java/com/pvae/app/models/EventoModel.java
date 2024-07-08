@@ -20,6 +20,9 @@ public class EventoModel {
     @Column(unique =true , nullable =false)
     private Long idevento;
     private String nombre;
+    @Column(name = "imagen_fondo", nullable = true)
+    private String imagenFondo;
+
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<CertificadoModel> certificados = new ArrayList<>();;
@@ -30,7 +33,7 @@ public class EventoModel {
 
      
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List <EmiteModel> emites = new ArrayList<>();;
+    private List <EmiteModel> emites = new ArrayList<>();
 
 
 
@@ -102,6 +105,16 @@ public class EventoModel {
 
     public void setEmites(List<EmiteModel> emites) {
         this.emites = emites;
+    }
+
+
+    public String getImagenFondo() {
+        return imagenFondo;
+    }
+
+
+    public void setImagenFondo(String imagenFondo) {
+        this.imagenFondo = imagenFondo;
     }
     
     
