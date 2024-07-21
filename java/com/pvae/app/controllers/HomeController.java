@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,15 +21,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private EventoService eventoService;
+    private final EventoService eventoService;
+    private final CertificadoRepository certificadoRepository;
 
-    @Autowired
-    private CertificadoRepository certificadoRepository;
+    public HomeController(EventoService eventoService, CertificadoRepository certificadoRepository) {
+        this.eventoService = eventoService;
+        this.certificadoRepository = certificadoRepository;
+    }   
+
+
+
+    private String attributeNameTitulo="titulo";
+    private String attributeNameError="error";
+    private String attributeNameEvento= "evento";
+    
 
     @GetMapping("/")
     public String listarEventos(Model model) {
-        model.addAttribute("titulo", "Listado de Eventos");
+        model.addAttribute(attributeNameTitulo
+, "Listado de Eventos");
         model.addAttribute("listaeventos", eventoService.listarEventos());
         return "home";
     }
@@ -39,8 +48,8 @@ public class HomeController {
     public String crearEvento(Model model) {
         EventoModel evento = new EventoModel();
         List<EventoModel> listaEventos = eventoService.listarEventos();
-        model.addAttribute("titulo", "Crear Evento");
-        model.addAttribute("evento", evento);
+        model.addAttribute(attributeNameTitulo, "Crear Evento");
+        model.addAttribute(attributeNameEvento, evento);
         model.addAttribute("listaEventos", listaEventos);
         return "crear";
     }
@@ -54,17 +63,20 @@ public class HomeController {
         for (EventoModel eventito : listaEventos) {
             if (eventito.getNombre().equals(evento.getNombre())) {
                 String errorMessage = "Ya existe un evento con el nombre proporcionado.";
-                model.addAttribute("error", errorMessage);
-                model.addAttribute("titulo", "Crear Evento");
-                model.addAttribute("evento", evento);
+                model.addAttribute(attributeNameError
+, errorMessage);
+                model.addAttribute(attributeNameTitulo
+, "Crear Evento");
+                model.addAttribute(attributeNameEvento, evento);
                 model.addAttribute("listaEventos", listaEventos);
                 return "crear";
             }
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("titulo", "Crear Evento");
-            model.addAttribute("evento", evento);
+            model.addAttribute(attributeNameTitulo
+, "Crear Evento");
+            model.addAttribute(attributeNameEvento, evento);
             model.addAttribute("listaEventos", listaEventos);
             return "crear";
         }
@@ -77,8 +89,9 @@ public class HomeController {
     public String editarUnidad(@PathVariable("id") Long idevento, Model model) {
         EventoModel evento = eventoService.buscarEvento(idevento);
         List<EventoModel> listaEventos = eventoService.listarEventos();
-        model.addAttribute("titulo", "Editar Evento");
-        model.addAttribute("evento", evento);
+        model.addAttribute(attributeNameTitulo
+, "Editar Evento");
+        model.addAttribute(attributeNameEvento, evento);
         model.addAttribute("listaEventos", listaEventos);
         return "crear";
     }
@@ -92,7 +105,8 @@ public class HomeController {
     @GetMapping("/listarParticipantesPorEvento/{id}")
     public String listarParticipantesPorEvento(@PathVariable("id") Long eventoId, Model model) {
         List<ParticipanteModel> listaParticipantes = certificadoRepository.findParticipantesByEventoId(eventoId);
-        model.addAttribute("titulo", "Listado de Participantes para el evento "+eventoId);
+        model.addAttribute(attributeNameTitulo
+, "Listado de Participantes para el evento "+eventoId);
         model.addAttribute("listaparticipantes", listaParticipantes);
         return "consultas/participantes/participante";
     }

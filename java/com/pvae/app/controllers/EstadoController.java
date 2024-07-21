@@ -2,7 +2,6 @@ package com.pvae.app.controllers;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,31 +18,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("/consultas/estados")
 public class EstadoController {
-      @Autowired
-      private EstadoService estadoService;
+      private  final EstadoService estadoService;
+
+      public EstadoController(EstadoService estadoService) {
+            this.estadoService = estadoService;
+      }
+ 
+      private String attributeNameTitulo="titulo";
+      private String attributeNameEstado="estado";
+      private String attributeNameError="error";
+
+      private String rutaCrear = "consultas/estados/crear";
 
       @GetMapping("/")
       public String listarEventos(Model model){
-            model.addAttribute("titulo", "Listado de Estados");
+            model.addAttribute(attributeNameTitulo, "Listado de Estados");
             model.addAttribute("listaestados", estadoService.listarEstados());
             return "consultas/estados/estado";
       }
       @GetMapping("/crear")
       public String crearEstado(Model model){
             EstadoModel estado = new EstadoModel();
-            model.addAttribute("titulo", "Crear Estado");
-            model.addAttribute("estado", estado);
-            return "consultas/estados/crear";
+            model.addAttribute(attributeNameTitulo
+, "Crear Estado");
+            model.addAttribute(attributeNameEstado, estado);
+            return rutaCrear;
       }
       @PostMapping("/guardar")
       public String guardarEstado(@Valid @ModelAttribute("estado") EstadoModel estado, Model model){
             for(EstadoModel estadito : estadoService.listarEstados()){
                   if(estadito.getDescripcion().equals(estado.getDescripcion())){
                         String errorMessage = "Ya existe un estado con el nombre proporcionado.";
-                        model.addAttribute("error", errorMessage);
-                        model.addAttribute("titulo", "Crear Estado");
-                        model.addAttribute("estado", estado);
-                        return "consultas/estados/crear";
+                        model.addAttribute(attributeNameError
+, errorMessage);
+                        model.addAttribute(attributeNameTitulo
+, "Crear Estado");
+                        model.addAttribute(attributeNameEstado, estado);
+                        return rutaCrear;
                   }
             }
             estadoService.guardarEstado(estado);
@@ -53,9 +64,9 @@ public class EstadoController {
       @GetMapping("/editar/{id}")
       public String editarEstado(@PathVariable Long id, Model model){
             EstadoModel estado = estadoService.buscarEstado(id);
-            model.addAttribute("titulo", "Editar Estado");
-            model.addAttribute("estado", estado);
-            return "consultas/estados/crear";
+            model.addAttribute(attributeNameTitulo, "Editar Estado");
+            model.addAttribute(attributeNameEstado, estado);
+            return rutaCrear;
       }
       @GetMapping("/eliminar/{id}")
       public String eliminarEstado(@PathVariable Long id){

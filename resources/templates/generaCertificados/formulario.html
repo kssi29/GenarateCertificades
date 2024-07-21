@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="plantilla/plantilla :: head">
+<head th:replace="~{plantilla/plantilla :: head}"></head>
+
       <script th:src="@{/js/custom.js}"></script>
 </head>
 
 <body>
       <div id="wrapper">
             <!-- Sidebar -->
-            <header th:replace="plantilla/plantilla :: sidebar"></header>
+            <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+
             <!-- End of Sidebar -->
 
             <!-- Content Wrapper -->
@@ -30,7 +32,8 @@
                                                                       <label for="unidadSeleccionada">Seleccionar Unidad:</label>
                                                                       <select id="unidadSeleccionada" class="form-control form-control-user" required>
                                                                           <option value="">Selecciona una opción</option>
-                                                                          <option th:each="unidad : ${listaUnidades}" th:value="${unidad.idunidad}" th:text="${unidad.nombre}"></option>
+                                                                          <option th:each="unidad : ${listaUnidades
+}" th:value="${unidad.idunidad}" th:text="${unidad.nombre}"></option>
                                                                       </select>
                                                                   </div>
                                                                   <div class="form-group">
@@ -41,7 +44,8 @@
                                                               </form>
                                                               
                                                               <!-- Elemento oculto para almacenar los datos de las unidades -->
-                                                              <div id="unidadesData" th:data-unidades="${listaUnidades}" style="display: none;"></div>
+                                                              <div id="unidadesData" th:data-unidades="${listaUnidades
+}" style="display: none;"></div>
                                                               
                                                               <script type="text/javascript">
                                                                   // Obtener los datos de las unidades del atributo data
@@ -71,7 +75,8 @@
                   <!-- End of Main Content -->
 
                   <!-- Footer -->
-                  <footer th:replace="plantilla/plantilla :: footer"></footer>
+                  <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
                   <!-- End of Footer -->
             </div>
             <!-- End of Content Wrapper -->

@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class GeneraCertificadoController {
       @Autowired
       private UnidadService   unidadService;
+      private String attributeNameTitulo="titulo";
 
       @GetMapping("/")
       public String listarUnidades(Model model) {
-            model.addAttribute("titulo", "Generar Certificado");
+            model.addAttribute(attributeNameTitulo
+, "Generar Certificado");
             model.addAttribute("listaUnidades", unidadService.listarUnidades());
             return "generaCertificados/formulario";
       }

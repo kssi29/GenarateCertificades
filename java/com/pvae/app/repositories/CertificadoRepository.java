@@ -13,8 +13,12 @@ import com.pvae.app.models.ParticipanteModel;
 @Repository
 public interface CertificadoRepository extends CrudRepository<CertificadoModel, Long>{
 
-       @Query("SELECT cert.participante FROM CertificadoModel cert WHERE cert.evento.idevento = :eventoId")
+   
+       @Query("SELECT cert.participante FROM CertificadoModel cert WHERE cert.evento.idevento = :eventoId ")
        List<ParticipanteModel> findParticipantesByEventoId(@Param("eventoId") Long eventoId);
+
+       @Query("SELECT cert.participante FROM CertificadoModel cert WHERE cert.evento.idevento = :eventoId AND cert.participante.tipo = '0'")
+       List<ParticipanteModel> findAutoridadesByEventoId(@Param("eventoId") Long eventoId);
 
        
        CertificadoModel findByEventoAndParticipante(EventoModel evento, ParticipanteModel participante);

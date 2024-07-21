@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="plantilla/plantilla :: head">
+<head th:replace="~{plantilla/plantilla :: head}"></head>
+
       <script th:src="@{/js/custom.js}"></script>
 </head>
 
 <body>
       <div id="wrapper">
             <!-- Sidebar -->
-            <header th:replace="plantilla/plantilla :: sidebar"></header>
+            <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+
             <!-- End of Sidebar -->
 
             <!-- Content Wrapper -->
@@ -41,7 +43,8 @@
                   <!-- End of Main Content -->
 
                   <!-- Footer -->
-                  <footer th:replace="plantilla/plantilla :: footer"></footer>
+                  <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
                   <!-- End of Footer -->
             </div>
             <!-- End of Content Wrapper -->

@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,24 +22,24 @@ import jakarta.transaction.Transactional;
 @Service
 public class SubirArchivoService {
 
-    @Autowired
-    private ParticipanteService participanteService;
+    private final ParticipanteService participanteService;
+    private final EventoService eventoService;
+    private final CertificadoService certificadoService;
 
-    @Autowired
-    private EventoService eventoService;
+    public SubirArchivoService(ParticipanteService participanteService, EventoService eventoService,
+            CertificadoService certificadoService) {
+        this.participanteService = participanteService;
+        this.eventoService = eventoService;
+        this.certificadoService = certificadoService;
+    }
 
-    @Autowired
-    private CertificadoService certificadoService;
-    
 
 
     @Transactional
     public String procesarYGuardarExcel(MultipartFile archivo, Long eventoId) {
         try {
             EventoModel evento = eventoService.buscarEvento(eventoId);
-            if (evento == null) {
-                throw new RuntimeException("Evento no encontrado");
-            }
+
 
             InputStream inputStream = archivo.getInputStream();
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -63,10 +62,10 @@ public class SubirArchivoService {
                 String nombre = cellIterator.next().getStringCellValue(); // NOMBRE
                 int tipo = (int) cellIterator.next().getNumericCellValue(); // TIPO
 
-                // Buscar o crear el participante
+
                 ParticipanteModel participante = participanteService.obtenerOPersistirParticipante(ci, email, paterno, materno, nombre, String.valueOf(tipo));
 
-                // Crear y guardar el certificado asociado al participante y evento
+
                 certificadoService.guardarCertificado(evento, participante);
             }
 

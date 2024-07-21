@@ -21,11 +21,13 @@ import com.pvae.app.servicies.SubirArchivoService;
 @RequestMapping("/subirArchivo")
 public class SubirArchivoController {
     private final SubirArchivoService subirArchivoService;
-     @Autowired
-    private EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
 
-    public SubirArchivoController(SubirArchivoService subirArchivoService) {
+
+
+    public SubirArchivoController(SubirArchivoService subirArchivoService,EventoRepository eventoRepository) {
         this.subirArchivoService = subirArchivoService;
+        this.eventoRepository = eventoRepository;
        
     }
 
@@ -43,35 +45,29 @@ public class SubirArchivoController {
         public ResponseEntity<String> manejaSubidaImagen(@RequestParam("imagen") MultipartFile imagen,
                 @RequestParam("eventoId") Long eventoId) {
             try {
-                // Verificar si se proporcionó una imagen
-                if (imagen.isEmpty()) {
-                    // Si no se proporcionó imagen, podrías querer limpiar el atributo imagenFondo
+                    if (imagen.isEmpty()) {
+               
                     Optional<EventoModel> optionalEvento = eventoRepository.findById(eventoId);
                     if (optionalEvento.isPresent()) {
                         EventoModel evento = optionalEvento.get();
-                        evento.setImagenFondo(null); // Limpiar el nombre de la imagen de fondo
-                        eventoRepository.save(evento); // Guardar los cambios en la base de datos
+                        evento.setImagenFondo(null); 
+                        eventoRepository.save(evento); 
                         return ResponseEntity.ok("Imagen eliminada correctamente del evento");
                     } else {
                         return ResponseEntity.badRequest().body("Evento no encontrado");
                     }
                 } else {
-                    // Obtener la ruta donde deseas guardar la imagen
-                    String directorioDestino = "C:/workspace/app/src/main/resources/static/Recursos/Fondos/";
-                    // Nombre del archivo
-                    String nombreArchivo = eventoId + "_" + imagen.getOriginalFilename();
-                    // Construir la ruta completa
-                    Path rutaCompleta = Paths.get(directorioDestino + nombreArchivo);
 
-                    // Guardar la imagen en el sistema de archivos
+                    String directorioDestino = "C:/workspace/app/src/main/resources/static/Recursos/Fondos/";
+                    String nombreArchivo = eventoId + "_" + imagen.getOriginalFilename();
+                    Path rutaCompleta = Paths.get(directorioDestino + nombreArchivo);
                     Files.write(rutaCompleta, imagen.getBytes());
 
-                    // Actualizar el evento con el nombre de la imagen de fondo
                     Optional<EventoModel> optionalEvento = eventoRepository.findById(eventoId);
                     if (optionalEvento.isPresent()) {
                         EventoModel evento = optionalEvento.get();
-                        evento.setImagenFondo(nombreArchivo); // Actualizar el nombre de la imagen de fondo
-                        eventoRepository.save(evento); // Guardar los cambios en la base de datos
+                        evento.setImagenFondo(nombreArchivo);
+                        eventoRepository.save(evento); 
                         return ResponseEntity.ok("Imagen subida y asociada correctamente al evento");
                     } else {
                         return ResponseEntity.badRequest().body("Evento no encontrado");

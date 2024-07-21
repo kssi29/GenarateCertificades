@@ -1,71 +1,76 @@
 package com.pvae.app.servicies;
+
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.pvae.app.models.ParticipanteModel;
 import com.pvae.app.repositories.ParticipanteRepository;
 
 import jakarta.transaction.Transactional;
+
 @Service
 public class ParticipanteService {
-      @Autowired
-      private ParticipanteRepository participanteRepository;
-      
+
+      private final ParticipanteRepository participanteRepository;
+
+      public ParticipanteService(ParticipanteRepository participanteRepository) {
+            this.participanteRepository = participanteRepository;
+      }
+
       public List<ParticipanteModel> listarParticipantes() {
             return (List<ParticipanteModel>) participanteRepository.findAll();
       }
-      public ParticipanteModel buscarParticipante(Long id){
+
+      public ParticipanteModel buscarParticipante(Long id) {
             return participanteRepository.findById(id).orElse(null);
       }
+
       @Transactional
-      public void guardarParticipante(ParticipanteModel participante){
+      public void guardarParticipante(ParticipanteModel participante) {
             participanteRepository.save(participante);
       }
+
       @Transactional
-      public void eliminarParticipante(Long idparticipante){
+      public void eliminarParticipante(Long idparticipante) {
             participanteRepository.deleteById(idparticipante);
       }
+
       @Transactional
-public ParticipanteModel obtenerOPersistirParticipante(int ci, String email, String paterno, String materno, String nombre, String tipo) {
-    // Buscar participante por CI
-    ParticipanteModel participante = participanteRepository.findByCi(ci);
+      public ParticipanteModel obtenerOPersistirParticipante(int ci, String email, String paterno, String materno,
+                  String nombre, String tipo) {
 
-    if (participante == null) {
-        // Si no se encuentra, crear un nuevo participante
-        participante = new ParticipanteModel();
-        participante.setci(ci);
-        participante.setemail(email);
-        participante.setpaterno(paterno);
-        participante.setmaterno(materno);
-        participante.setnombre(nombre);
-        participante.setTipo(tipo);
+            ParticipanteModel participante = participanteRepository.findByCi(ci);
 
-        // Guardar el participante en la base de datos
-        participanteRepository.save(participante);
-    } else {
-        // Si se encuentra un participante con el mismo CI, verificar el tipo
-        if (!participante.getTipo().equals(tipo)) {
-            // Si el tipo es diferente, crear un nuevo participante
-            participante = new ParticipanteModel();
-            participante.setci(ci);
-            participante.setemail(email);
-            participante.setpaterno(paterno);
-            participante.setmaterno(materno);
-            participante.setnombre(nombre);
-            participante.setTipo(tipo);
+            if (participante == null) {
 
-            // Guardar el nuevo participante en la base de datos
-            participanteRepository.save(participante);
-        }
-        // Si el tipo es el mismo, devolver el participante existente
-    }
+                  participante = new ParticipanteModel();
+                  participante.setci(ci);
+                  participante.setemail(email);
+                  participante.setpaterno(paterno);
+                  participante.setmaterno(materno);
+                  participante.setnombre(nombre);
+                  participante.setTipo(tipo);
 
-    return participante;
-}
+                  participanteRepository.save(participante);
+            } else {
 
+                  if (!participante.getTipo().equals(tipo)) {
 
+                        participante = new ParticipanteModel();
+                        participante.setci(ci);
+                        participante.setemail(email);
+                        participante.setpaterno(paterno);
+                        participante.setmaterno(materno);
+                        participante.setnombre(nombre);
+                        participante.setTipo(tipo);
 
-     
+                        participanteRepository.save(participante);
+                  }
+
+            }
+
+            return participante;
+      }
 
 }

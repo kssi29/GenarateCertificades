@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="plantilla/plantilla :: head"></head>
+<head th:replace="~{plantilla/plantilla :: head}">
+    <title>Unidades</title>
+</head>
+</head>
 
 <body>
     <div id="wrapper">
         <!-- Sidebar -->
-        <header th:replace="plantilla/plantilla :: sidebar"></header>
+        <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -20,14 +24,14 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                            <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
+                            <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}">Unidades</h4>
                             <a th:href="@{/consultas/unidades/crear}" class="btn btn-primary btn-sm">Agregar Unidad</a>
-                            <a th:href="@{/consultas/unidades/(format='pdf')}" class="btn btn-info" title="Exportar PDF" target="_blank">Exportar</a>
+                          
 
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -38,11 +42,11 @@
                                     </thead>
                                     <tbody>
                                         <!-- Iterar sobre cada unidad y mostrar en la tabla -->
-                                        <tr th:each="unidad : ${listaunidades}">
+                                        <tr th:each="unidad : ${listaUnidades}">
                                             <td th:text="${unidad.idunidad}"></td>
                                             <td th:text="${unidad.nombre}"></td>
                                             <td
-                                                th:text="${unidad.unidadPadre != null ? unidad.unidadPadre.nombre : '0'}">
+                                                th:text="${unidad.unidadPadre != null ? unidad.unidadPadre.nombre : 'Ninguno'}">
                                             </td>
 
 
@@ -81,7 +85,8 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer th:replace="plantilla/plantilla :: footer"></footer>
+            <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
             <!-- End of Footer -->
         </div>
         <!-- End of Content Wrapper -->
