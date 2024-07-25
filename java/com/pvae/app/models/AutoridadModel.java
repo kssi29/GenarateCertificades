@@ -27,6 +27,24 @@ public class AutoridadModel extends PersonaModel {
         this.cargo = cargo;
     }
 
+    @Override
+    public String getnombre(){
+        return super.getnombre();
+    }
+    @Override
+    public String getpaterno(){
+        return super.getpaterno();
+    }
+    @Override
+    public String getmaterno(){
+        return super.getmaterno();
+    }
+    @Override
+    public int getci(){
+        return super.getci();
+    }
+    
+
 
     public String getCargo() {
         return cargo;

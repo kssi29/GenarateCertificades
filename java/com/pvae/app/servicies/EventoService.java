@@ -1,7 +1,7 @@
 package com.pvae.app.servicies;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.pvae.app.models.EventoModel;
@@ -12,8 +12,11 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class EventoService {
-      @Autowired
-      private EventoRepository eventoRepository;
+      private final EventoRepository eventoRepository;
+
+      public EventoService(EventoRepository eventoRepository) {
+            this.eventoRepository = eventoRepository;
+      }
 
       public List<EventoModel> listarEventos() {
             return (List<EventoModel>) eventoRepository.findAll();
@@ -32,6 +35,5 @@ public class EventoService {
       public void eliminarEvento(Long idevento) {
             eventoRepository.deleteById(idevento);
       }
-
 
 }

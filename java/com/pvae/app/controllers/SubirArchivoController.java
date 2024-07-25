@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +30,20 @@ public class SubirArchivoController {
         this.eventoRepository = eventoRepository;
        
     }
-
     @PostMapping("/excel")
     public ResponseEntity<String> manejaSubidaExcel(@RequestParam("archivo") MultipartFile archivo,
-            @RequestParam("eventoId") Long eventoId) {
+                                                    @RequestParam("eventoId") Long eventoId) {
+        System.err.println("Estamos en el controller");
+        System.err.println("Evento ID: " + eventoId);
         if (archivo.isEmpty()) {
+            System.err.println("Archivo vacío");
             return ResponseEntity.badRequest().body("Archivo vacío");
         }
         String resultadoProcesamiento = subirArchivoService.procesarYGuardarExcel(archivo, eventoId);
+        System.err.println("cool");
         return ResponseEntity.ok(resultadoProcesamiento);
     }
+    
 
         @PostMapping("/imagen")
         public ResponseEntity<String> manejaSubidaImagen(@RequestParam("imagen") MultipartFile imagen,
@@ -68,9 +72,11 @@ public class SubirArchivoController {
                         EventoModel evento = optionalEvento.get();
                         evento.setImagenFondo(nombreArchivo);
                         eventoRepository.save(evento); 
+                        
                         return ResponseEntity.ok("Imagen subida y asociada correctamente al evento");
                     } else {
                         return ResponseEntity.badRequest().body("Evento no encontrado");
+                      
                     }
                 }
             } catch (Exception e) {

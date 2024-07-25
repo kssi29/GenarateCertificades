@@ -1,0 +1,116 @@
+!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{plantilla/plantilla :: head}">
+      <title>Crear/Editar Evento</title>
+</head>
+
+<script th:src="@{/js/custom.js}"></script>
+</head>
+
+<body>
+      <div id="wrapper">
+            <!-- Sidebar -->
+            <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                  <!-- Main Content -->
+                  <div id="content">
+                        <div class="container">
+                              <div class="card o-hidden border-0 shadow-lg my-5">
+                                    <div class="card-body p-0">
+                                          <div class="row justify-content-center">
+                                                <div class="col-lg-7">
+                                                      <div class="p-5">
+                                                            <div class="text-center">
+                                                                  <h1 class="h4 text-gray-900 mb-4" th:text="${titulo}">
+                                                                        Agregar Elementos al Evento
+                                                                  </h1>
+                                                            </div>
+                                                            
+                                                            <label for="participantes">Agregar Participantes:</label>
+                                                            <form action="/subirArchivo/excel" method="post"
+                                                                  enctype="multipart/form-data">
+                                                                  
+                                                                  <input type="file" name="archivo"
+                                                                        accept=".xls,.xlsx" required>
+                                                                  <input type="hidden" name="eventoId"
+                                                                        th:value="${evento.idevento}">
+                                                                  <button type="submit"
+                                                                        class="btn btn-primary btn-circle btn-sm">
+                                                                        <i class="fas fa-user-plus"></i>
+                                                                  </button>
+                                                            </form>
+                                                            <!-- Botón para subir imagen -->
+                                                              <label for="imagen">Agregar Imagen de Fondo:</label>
+                                                            <!-- Botón para subir imagen -->
+                                                            <form action="/subirArchivo/imagen" method="post"
+                                                                  enctype="multipart/form-data">
+                                                                  <input type="file" name="imagen" accept="image/*">
+                                                                  <input type="hidden" name="eventoId"
+                                                                        th:value="${evento.idevento}">
+                                                                  <button type="submit"
+                                                                        class="btn btn-warning btn-circle btn-sm">
+                                                                        <i class="fas fa-image"></i>
+                                                                  </button>
+                                                            </form>
+
+                                                            <form class="user" method="post"
+                                                                  th:action="@{/guardarElementos}"
+                                                                  th:object="${evento}">
+                                                                  <div class="form-group">
+                                                                        <input type="hidden" th:field="*{idevento}" />
+
+                                                                        <label for="unidad">Unidad</label>
+                                                                        <select class="form-control" id="unidad"
+                                                                              name="unidadId">
+                                                                              <option th:each="unidad : ${unidades}"
+                                                                                    th:value="${unidad.idunidad}"
+                                                                                    th:text="${unidad.nombre}"></option>
+                                                                        </select>
+
+                                                                  </div>
+
+                                                                  <button type="submit"
+                                                                        class="btn btn-primary btn-user btn-block">Guardar
+                                                                  </button>
+                                                                  <a href="/"
+                                                                        class="btn btn-secondary btn-user btn-block">Cancelar</a>
+                                                                  <p><br></p>
+                                                                  <div th:if="${error}" class="alert alert-danger">
+                                                                        <p th:text="${error}"></p>
+                                                                  </div>
+
+                                                            </form>
+
+
+
+
+
+
+
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <!-- End of Main Content -->
+
+                  <!-- Footer -->
+                  <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
+                  <!-- End of Footer -->
+            </div>
+            <!-- End of Content Wrapper -->
+      </div>
+      <!-- End of Page Wrapper -->
+
+
+</body>
+
+</html>

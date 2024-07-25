@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{plantilla/plantilla :: head}"></head>
+<head th:replace="~{plantilla/plantilla :: head}">
+      <title>Crear Unidad</title>
+</head>
+
 
       <script th:src="@{/js/custom.js}"></script>
 </head>
@@ -30,8 +33,7 @@
                                                             </div>
                                                             <form class="user" method="post"
                                                                   th:action="@{/consultas/unidades/guardar}"
-                                                                  th:object="${unidad}"
-                                                                  onsubmit="return confirmEliminar()">
+                                                                  th:object="${unidad}">
                                                                   <div class="form-group">
                                                                         <input type="hidden" th:field="*{idunidad}">
                                                                         <label for="nombre">Nombre de la Unidad</label>
@@ -74,19 +76,7 @@
 
                                                             </form>
 
-                                                            <script th:inline="javascript">
-                                                                  /*<![CDATA[*/
-                                                                  function confirmEliminar() {
-                                                                        var nombreUnidad = /*[[${unidad.nombre}]]*/ '';
-                                                                        if (nombreUnidad === 'Universidad Mayor de San Andrés') {
-                                                                              alert('No se puede eliminar la unidad \'Universidad Mayor de San Andrés\'.');
-                                                                              return false; // Cancela el envío del formulario
-                                                                        }
-                                                                        return true; // Continúa con el envío del formulario
-                                                                  }
-                                                                  /*]]>*/
-                                                            </script>
-
+                                                    
 
 
 

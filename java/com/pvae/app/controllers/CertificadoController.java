@@ -23,6 +23,7 @@ public class CertificadoController {
     @GetMapping("/generarCertificados/{eventoId}")
     public String generarCertificados(@PathVariable("eventoId") Long eventoId, Model model) {
         try {
+            System.err.println("Generando certificados para el evento con ID: " + eventoId);
             generaPDFUtil.generaCertificados(eventoId);
         } catch (Exception e) {
    

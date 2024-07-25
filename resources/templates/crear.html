@@ -1,12 +1,13 @@
 
-<!--idevento , nombre-->
 
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{plantilla/plantilla :: head}"></head>
+<head th:replace="~{plantilla/plantilla :: head}">
+      <title>Crear/Editar Evento</title>
+</head>
 
-      <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
 </head>
 
 <body>
@@ -31,36 +32,33 @@
                                                                         Crear Nueva Evento
                                                                   </h1>
                                                             </div>
-                                                            <form class="user" method="post"
-                                                                  th:action="@{/guardar}" 
-                                                                  th:object="${evento}"
-                                                                  onsubmit="return confirmEliminar()">
+                                                            <form class="user" method="post" th:action="@{/guardar}"
+                                                                  th:object="${evento}">
                                                                   <div class="form-group">
                                                                         <input type="hidden" th:field="*{idevento}">
                                                                         <label for="nombre">Nombre del Evento</label>
                                                                         <input type="text"
                                                                               class="form-control form-control-user"
                                                                               th:field="*{nombre}"
-                                                                              placeholder="Nombre del Evento"
-                                                                              required>
+                                                                              placeholder="Nombre del Evento" required>
                                                                         <small class="form-text text-danger"
                                                                               th:if="${#fields.hasErrors('nombre')}"
                                                                               th:errors="*{nombre}"></small>
                                                                   </div>
-                                                                  
+
                                                                   <button type="submit"
                                                                         class="btn btn-primary btn-user btn-block">Guardar
-                              </button>
+                                                                  </button>
                                                                   <a href="/"
                                                                         class="btn btn-secondary btn-user btn-block">Cancelar</a>
-                                                                   <p><br></p>
+                                                                  <p><br></p>
                                                                   <div th:if="${error}" class="alert alert-danger">
                                                                         <p th:text="${error}"></p>
                                                                   </div>
 
                                                             </form>
 
-                              
+
 
 
 
@@ -84,7 +82,7 @@
       </div>
       <!-- End of Page Wrapper -->
 
-    
+
 </body>
 
 </html>

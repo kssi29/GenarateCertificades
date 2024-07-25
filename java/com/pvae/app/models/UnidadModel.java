@@ -42,6 +42,8 @@ public class UnidadModel {
     @JoinColumn(name = "unidad_padre_id")
     private UnidadModel unidadPadre;
 
+    @OneToMany(mappedBy = "unidad", cascade = CascadeType.ALL)
+    private List<EventoModel> eventos;
  
 
     public UnidadModel() {
@@ -104,6 +106,14 @@ public class UnidadModel {
 
     public void setUnidadPadre(UnidadModel unidadPadre) {
         this.unidadPadre = unidadPadre;
+    }
+
+    public List<EventoModel> getEventos() {
+        return eventos;
+    }
+
+    public void setEventos(List<EventoModel> eventos) {
+        this.eventos = eventos;
     }
 
 

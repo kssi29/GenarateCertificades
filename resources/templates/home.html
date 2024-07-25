@@ -2,6 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{plantilla/plantilla :: head}"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -26,12 +27,14 @@
                             <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
                             <a th:href="@{/crear}" class="btn btn-primary btn-sm">Agregar Evento</a>
 
+                            <a th:href="@{/crearSteps}" class="btn btn-primary btn-sm">Agregar Evento22</a>
+
 
                         </div>
 
                  
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -50,43 +53,35 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
+                                            
+
                                             <!-- Botón para eliminar evento -->
                                             <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}"
                                                 class="btn btn-danger btn-circle btn-sm">
                                                 <i class="fas fa-trash"></i>
                                             </a>
+                                            <a th:href="@{/agregar/{idevento}(idevento=${evento.idevento})}" 
+                                                class="btn btn-dark btn-circle btn-sm">
+                                                <i class="fas fa-plus"></i>
+                                            </a>
+                                        
 
-                                            <!-- Formulario para agregar participantes -->
-                                            <form action="/subirArchivo/excel" method="post"
-                                                enctype="multipart/form-data">
-                                                <input type="file" name="archivo" accept=".xls,.xlsx">
-                                                <input type="hidden" name="eventoId" th:value="${evento.idevento}">
-                                                <button type="submit" class="btn btn-primary btn-circle btn-sm">
-                                                    <i class="fas fa-user-plus"></i>
-                                                </button>
-                                            </form>
-
-                                           
-                                            <!-- Botón para subir imagen -->
-                                            <form action="/subirArchivo/imagen" method="post" enctype="multipart/form-data">
-                                                <input type="file" name="imagen" accept="image/*">
-                                                <input type="hidden" name="eventoId" th:value="${evento.idevento}">
-                                                <button type="submit" class="btn btn-warning btn-circle btn-sm">
-                                                    <i class="fas fa-image"></i> 
-                                                </button>
-                                            </form>
-                                            
-                                             <!-- Enlace para listar participantes por evento -->
                                              <a th:href="@{/listarParticipantesPorEvento/{id}(id=${evento.idevento})}"
                                              class="btn btn-success btn-circle btn-sm">
                                              <i class="fas fa-list"></i>
-                                         </a>
+                                             </a>
 
                                             <!-- Botón para generar certificados -->
                                             <a th:href="@{/generarCertificados/{eventoId}(eventoId=${evento.idevento})}"
-                                                class="btn btn-primary btn-circle btn-sm">
+                                                class="btn btn-warning btn-circle btn-sm">
                                                 <i class="fas fa-certificate"></i> 
                                             </a>
+
+
+
+
+
+                                    
 
 
                                         </td>

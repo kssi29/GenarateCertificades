@@ -38,6 +38,7 @@ public class SubirArchivoService {
     @Transactional
     public String procesarYGuardarExcel(MultipartFile archivo, Long eventoId) {
         try {
+            System.err.println("\n estamos en el service");
             EventoModel evento = eventoService.buscarEvento(eventoId);
 
 

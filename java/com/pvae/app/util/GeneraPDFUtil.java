@@ -21,10 +21,13 @@ import com.itextpdf.layout.properties.VerticalAlignment;
 import com.pvae.app.exception.Myexception;
 import com.pvae.app.models.EventoModel;
 import com.pvae.app.models.ParticipanteModel;
+import com.pvae.app.models.UnidadModel;
 import com.pvae.app.repositories.CertificadoRepository;
 import com.pvae.app.repositories.EventoRepository;
+import com.pvae.app.servicies.UnidadService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +41,15 @@ public class GeneraPDFUtil {
 
     private final EventoRepository eventoRepository;
     private final CertificadoRepository certificadoRepository;
+    private final UnidadService unidadService;
 
-    public GeneraPDFUtil(EventoRepository eventoRepository, CertificadoRepository certificadoRepository) {
+    public GeneraPDFUtil(EventoRepository eventoRepository, CertificadoRepository certificadoRepository,
+            UnidadService unidadService) {
         this.eventoRepository = eventoRepository;
         this.certificadoRepository = certificadoRepository;
+        this.unidadService = unidadService;
     }
+
     public void generaCertificados(Long eventoId) throws Myexception {
 
         try (PdfDocument pdfDoc = new PdfDocument(
@@ -60,27 +67,27 @@ public class GeneraPDFUtil {
         try (Document doc = new Document(pdfDoc, pageSize)) {
             List<ParticipanteModel> listaParticipantes = certificadoRepository.findParticipantesByEventoId(eventoId);
 
-
             List<ParticipanteModel> autoridades = new ArrayList<>();
             List<ParticipanteModel> receptores = new ArrayList<>();
             separarParticipantes(listaParticipantes, autoridades, receptores);
 
-
             System.out.println("recpetores size: " + receptores.size());
             for (int i = 0; i < receptores.size(); i++) {
                 ParticipanteModel participante = receptores.get(i);
-    
+
                 PdfCanvas canvas = new PdfCanvas(pdfDoc.addNewPage());
-                canvas.addImageFittedIntoRectangle(ImageDataFactory.create(buscarImagenFondoPath(eventoId)), pageSize, false);
-    
-                aniadirElementosPDF(doc, participante, autoridades, i, receptores.size());
+                canvas.addImageFittedIntoRectangle(ImageDataFactory.create(buscarImagenFondoPath(eventoId)), pageSize,
+                        false);
+
+                aniadirElementosPDF(eventoId, doc, participante, autoridades, i, receptores.size());
             }
         } catch (Exception e) {
             throw new Myexception("Error al generar el docuemnto del evento con la id: " + eventoId, e);
         }
     }
 
-    private void separarParticipantes(List<ParticipanteModel> listaParticipantes, List<ParticipanteModel> autoridades, List<ParticipanteModel> receptores) {
+    private void separarParticipantes(List<ParticipanteModel> listaParticipantes, List<ParticipanteModel> autoridades,
+            List<ParticipanteModel> receptores) {
         for (ParticipanteModel participante : listaParticipantes) {
             if ("0".equals(participante.getTipo())) {
                 autoridades.add(participante);
@@ -90,36 +97,48 @@ public class GeneraPDFUtil {
         }
     }
 
-    public void aniadirElementosPDF(Document document, ParticipanteModel participante, List<ParticipanteModel> autoridades, int index, int totalRecibe) {
+    public void aniadirElementosPDF(Long eventoid, Document document, ParticipanteModel participante,
+            List<ParticipanteModel> autoridades, int index, int totalRecibe) {
         try {
-            
-            document.add(encabezadoTable());
+
+            document.add(encabezadoTable(eventoid));
             document.add(cuerpoTable(participante));
             document.add(ponerFirmas(autoridades));
-            
+
             if (index < totalRecibe - 1) {
                 document.add(new AreaBreak());
-                System.out.println("index: " + index + " totalRecibe: " + (totalRecibe-1));
+                System.out.println("index: " + index + " totalRecibe: " + (totalRecibe - 1));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    
-
-
-    private Table encabezadoTable() {
+    private Table encabezadoTable(Long eventoid) {
         Table headerTable = new Table(1);
         headerTable.setWidth(750);
-        headerTable.addCell(createCellUp("UNIDAD1", TextAlignment.CENTER, 1, 1));
-        headerTable.addCell(createCellUp("UNIDAD2", TextAlignment.CENTER, 1, 1));
-        headerTable.addCell(createCellUp("NOMBRE CURSO", TextAlignment.CENTER, 1, 1));
+
+        Optional<EventoModel> optionalEvento = eventoRepository.findById(eventoid);
+        if (optionalEvento.isPresent()) {
+            EventoModel evento = optionalEvento.get();
+
+            UnidadModel unidad = evento.getUnidad();
+            List<UnidadModel> unidadesPadres = unidadService.obtenerUnidadesPadres(unidad);
+
+            for (UnidadModel unidadPadre : unidadesPadres) {
+                headerTable.addCell(createCellUp(unidadPadre.getNombre(), TextAlignment.CENTER, 1, 1));
+            }
+        
+            headerTable.addCell(createCellUp(evento.getNombre(), TextAlignment.CENTER, 1, 1));
+        
+        } else {
+            System.out.println("No se encontró ningún evento con el ID: " + eventoid);
+        }
         headerTable.setMarginBottom(40);
 
-        
         return headerTable;
     }
+
 
     private Table cuerpoTable(ParticipanteModel participante) {
         Table mainTable = new Table(1);
@@ -138,17 +157,17 @@ public class GeneraPDFUtil {
     }
 
     private Table ponerFirmas(List<ParticipanteModel> autoridades) {
-        Table firmasTable = new Table(autoridades.size()); 
+        Table firmasTable = new Table(autoridades.size());
         firmasTable.setWidth(750);
         firmasTable.setBorder(Border.NO_BORDER);
-    
+
         try {
             for (ParticipanteModel autoridad : autoridades) {
- 
+
                 Table innerTable = new Table(1);
                 innerTable.setWidth(UnitValue.createPercentValue(100));
                 innerTable.setBorder(Border.NO_BORDER);
-    
+
                 // Celda para la firma
                 String rutaFirma = "C:/workspace/app/src/main/resources/static/Recursos/Firmas/firma1.png";
                 Image firma = new Image(ImageDataFactory.create(rutaFirma));
@@ -156,20 +175,19 @@ public class GeneraPDFUtil {
                 firmaCell.setVerticalAlignment(VerticalAlignment.MIDDLE);
                 firmaCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
                 firmaCell.setHeight(90);
-                firmaCell.setBorder(Border.NO_BORDER); 
+                firmaCell.setBorder(Border.NO_BORDER);
                 innerTable.addCell(firmaCell);
-           
 
+                String nombreCompleto = autoridad.getNombre() + " " + autoridad.getPaterno() + " "
+                        + autoridad.getMaterno();
+                Cell nombreCell = createCell(nombreCompleto, TextAlignment.CENTER, 12);
+                innerTable.addCell(nombreCell);
 
-            String nombreCompleto = autoridad.getNombre() + " " + autoridad.getPaterno() + " " + autoridad.getMaterno();
-            Cell nombreCell = createCell(nombreCompleto, TextAlignment.CENTER,12);
-            innerTable.addCell(nombreCell);
-
-            firmasTable.addCell(innerTable);
+                firmasTable.addCell(innerTable);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
         return firmasTable;
     }
 
@@ -192,7 +210,7 @@ public class GeneraPDFUtil {
         Paragraph paragraph = new Paragraph(nombreCompleto)
                 .setTextAlignment(alignment)
                 .setFontSize(fontSize);
-    
+
         Cell nombreCell = new Cell().add(paragraph);
         nombreCell.setBorder(Border.NO_BORDER);
         return nombreCell;
@@ -219,7 +237,7 @@ public class GeneraPDFUtil {
         return cell;
     }
 
-    private Cell salto (String salto){
+    private Cell salto(String salto) {
         Cell cell = new Cell().add(new Paragraph(salto));
         cell.setBorder(Border.NO_BORDER);
         return cell;

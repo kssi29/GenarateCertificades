@@ -3,12 +3,17 @@ package com.pvae.app.models;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -28,12 +33,25 @@ public class EventoModel {
     private List<CertificadoModel> certificados = new ArrayList<>();;
 
 
+    @ManyToOne
+    @JoinColumn(name = "unidad_id",referencedColumnName = "idunidad")
+    private UnidadModel unidad;
+
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<FirmaModel> firmas = new ArrayList<>();
 
-     
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List <EmiteModel> emites = new ArrayList<>();
+
+
+   
+/*
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+        name = "emite",
+        joinColumns = @JoinColumn(name = "evento_id", referencedColumnName = "idevento"),
+        inverseJoinColumns = @JoinColumn(name = "unidad_id", referencedColumnName = "idunidad")
+    )
+    private List<UnidadModel> unidades = new ArrayList<>();
+*/
 
 
 
@@ -46,16 +64,7 @@ public class EventoModel {
         this.nombre = nombre;
     }
 
-    public EventoModel(String nombre,ArrayList<CertificadoModel> certificados) {
-        this.nombre = nombre;
-        this.certificados = certificados;
-    }
 
-    public EventoModel(List<CertificadoModel> certificados, List<EmiteModel> emites, String nombre) {
-        this.certificados = certificados;
-        this.emites = emites;
-        this.nombre = nombre;
-    }
 
 
     public Long getIdevento() {
@@ -98,14 +107,6 @@ public class EventoModel {
     }
 
 
-    public List<EmiteModel> getEmites() {
-        return emites;
-    }
-
-
-    public void setEmites(List<EmiteModel> emites) {
-        this.emites = emites;
-    }
 
 
     public String getImagenFondo() {
@@ -116,6 +117,18 @@ public class EventoModel {
     public void setImagenFondo(String imagenFondo) {
         this.imagenFondo = imagenFondo;
     }
+
+
+
+    public UnidadModel getUnidad() {
+        return unidad;
+    }
+
+
+    public void setUnidad(UnidadModel unidad) {
+        this.unidad = unidad;
+    }
+    
     
     
 
