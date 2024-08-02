@@ -8,7 +8,7 @@ import com.pvae.app.models.ParticipanteModel;
 
 @Repository
 public interface ParticipanteRepository extends CrudRepository<ParticipanteModel, Long>{
-      ParticipanteModel findByCi(int ci);
+    ParticipanteModel findByCi(int ci);
 
 
 

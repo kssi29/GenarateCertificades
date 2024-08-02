@@ -7,12 +7,11 @@ import jakarta.persistence.*;
 @Table(name = "emite")
 public class EmiteModel {
 
-    @Id 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(unique =true , nullable =false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long idemite;
 
-    
 
     @ManyToOne
     @JoinColumn(name = "evento_id", referencedColumnName = "idevento")
@@ -21,15 +20,6 @@ public class EmiteModel {
     @ManyToOne
     @JoinColumn(name = "unidad_id", referencedColumnName = "idunidad")
     private UnidadModel unidad;
-
-    public EmiteModel() {
-    }
-
-    public EmiteModel(EventoModel evento, UnidadModel unidad) {
-        this.evento = evento;
-        this.unidad = unidad;
-    }
-
 
 
     public Long getIdemite() {
@@ -56,6 +46,5 @@ public class EmiteModel {
         this.unidad = unidad;
     }
 
-    
 
 }

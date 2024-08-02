@@ -6,117 +6,113 @@
 </head>
 
 <body>
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
 
-        <!-- End of Sidebar -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <br>
+    <!-- End of Sidebar -->
 
-
-
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                            <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
-                            <a th:href="@{/crear}" class="btn btn-primary btn-sm">Agregar Evento</a>
-
-                            <a th:href="@{/crearSteps}" class="btn btn-primary btn-sm">Agregar Evento22</a>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <br>
 
 
-                        </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                        <h4 class="m-0 font-weight-bold text-primary" th:text="${titulo}"></h4>
 
-                 
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="evento : ${listaeventos}">
-                                        <td th:text="${evento.idevento}"></td>
-                                        <td th:text="${evento.nombre}"></td>
-                                        <td>
-                                            <!-- Botón para editar evento -->
-                                            <a th:href="@{/editar/{idevento}(idevento=${evento.idevento})}"
-                                                class="btn btn-info btn-circle btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            
-
-                                            <!-- Botón para eliminar evento -->
-                                            <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}"
-                                                class="btn btn-danger btn-circle btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                            <a th:href="@{/agregar/{idevento}(idevento=${evento.idevento})}" 
-                                                class="btn btn-dark btn-circle btn-sm">
-                                                <i class="fas fa-plus"></i>
-                                            </a>
-                                        
-
-                                             <a th:href="@{/listarParticipantesPorEvento/{id}(id=${evento.idevento})}"
-                                             class="btn btn-success btn-circle btn-sm">
-                                             <i class="fas fa-list"></i>
-                                             </a>
-
-                                            <!-- Botón para generar certificados -->
-                                            <a th:href="@{/generarCertificados/{eventoId}(eventoId=${evento.idevento})}"
-                                                class="btn btn-warning btn-circle btn-sm">
-                                                <i class="fas fa-certificate"></i> 
-                                            </a>
-
-
-
-
-
-                                    
-
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <p><br></p>
-                        <!-- Muestra el mensaje de error si existe -->
-                        <div th:if="${error}" class="alert alert-danger">
-                            <p th:text="${error}"></p>
-                        </div>
-
-
+                        <a th:href="@{/crearSteps}" class="btn btn-primary btn-sm">Agregar Evento</a>
 
 
                     </div>
+
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable">
+                            <thead>
+                            <tr>
+                             <!--   <th>ID</th> -->
+                                <th>Nombre</th>
+                                <th>Unidad</th>
+                                <th>Plantilla</th>
+                                <th>Acciones</th>
+                                <th>Participantes</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="evento : ${listaeventos}">
+                            <!--  <td th:text="${evento.idevento}"></td>  -->
+                                <td th:text="${evento.nombre}"></td>
+                                <td th:text="${evento.getUnidad().getNombre()}"></td>
+                                <td th:text="${evento.getImagenFondo()}"></td>
+                                <td>
+                                    <!-- Botón para editar evento -->
+                                    <a th:href="@{/editar/{idevento}(idevento=${evento.idevento})}"
+                                       class="btn btn-info btn-circle btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <!-- Botón para eliminar evento -->
+                                    <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}"
+                                       class="btn btn-danger btn-circle btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    <a th:href="@{/agregar/{idevento}(idevento=${evento.idevento})}"
+                                       class="btn btn-dark btn-circle btn-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+
+                                    <!-- Botón para generar certificados -->
+                                    <a th:href="@{/generarCertificados/{eventoId}(eventoId=${evento.idevento})}"
+                                       class="btn btn-warning btn-circle btn-sm">
+                                        <i class="fas fa-certificate"></i>
+                                    </a>
+
+
+                                </td>
+                                <td>
+                                    <a th:href="@{/listarParticipantesPorEvento/{id}(id=${evento.idevento})}"
+                                       class="btn btn-success btn-circle btn-sm">
+                                        <i class="fas fa-list"></i>
+                                    </a>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p><br></p>
+                    <!-- Muestra el mensaje de error si existe -->
+                    <div th:if="${error}" class="alert alert-danger">
+                        <p th:text="${error}"></p>
+                    </div>
+
+
                 </div>
             </div>
-
-
-
         </div>
-        <!-- /.container-fluid -->
-    </div>
-    <!-- End of Main Content -->
 
-    <!-- Footer -->
-    <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
 
-    <!-- End of Footer -->
     </div>
-    <!-- End of Content Wrapper -->
-    </div>
-    <!-- End of Page Wrapper -->
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
 
+<!-- Footer -->
+<footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
+<!-- End of Footer -->
+</div>
+<!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+</body>
 </html>

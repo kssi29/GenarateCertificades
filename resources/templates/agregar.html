@@ -1,115 +1,140 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{plantilla/plantilla :: head}">
-      <title>Crear/Editar Evento</title>
+<head th:replace="~{plantilla/plantilla2 :: head}">
+    <title>Agregar Participantes</title>
 </head>
 
-<script th:src="@{/js/custom.js}"></script>
-</head>
 
 <body>
-      <div id="wrapper">
-            <!-- Sidebar -->
-            <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <header th:replace="~{plantilla/plantilla2 :: sidebar}"></header>
 
-            <!-- End of Sidebar -->
+    <!-- End of Sidebar -->
 
-            <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column">
-                  <!-- Main Content -->
-                  <div id="content">
-                        <div class="container">
-                              <div class="card o-hidden border-0 shadow-lg my-5">
-                                    <div class="card-body p-0">
-                                          <div class="row justify-content-center">
-                                                <div class="col-lg-7">
-                                                      <div class="p-5">
-                                                            <div class="text-center">
-                                                                  <h1 class="h4 text-gray-900 mb-4" th:text="${titulo}">
-                                                                        Agregar Elementos al Evento
-                                                                  </h1>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div class="container">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+
+                                <section class="signup-step-container">
+                                    <div class="container">
+                                        <div class="text-center">
+                                            <h1 class="h4 text-gray-900 mb-4">
+                                                <span th:text="${titulo}">Añadir Participantes a Evento</span>
+                                            </h1>
+                                        </div>
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="col-md-8">
+                                                <div class="wizard">
+                                                    <div class="wizard-inner">
+                                                        <div class="connecting-line"></div>
+                                                        <ul class="nav nav-tabs" role="tablist">
+                                                            <li role="presentation" class="active">
+                                                                <a href="#step1" data-toggle="tab" aria-controls="step1"
+                                                                   role="tab" aria-expanded="true">
+                                                                    <span class="round-tab">1</span> <i>Paso 1</i>
+                                                                </a>
+                                                            </li>
+                                                            <li role="presentation" class="disabled">
+                                                                <a href="#step2" data-toggle="tab" aria-controls="step2"
+                                                                   role="tab" aria-expanded="false">
+                                                                    <span class="round-tab">2</span> <i>Paso 2</i>
+                                                                </a>
+                                                            </li>
+                                                            <li role="presentation" class="disabled">
+                                                                <a href="#step3" data-toggle="tab" aria-controls="step3"
+                                                                   role="tab">
+                                                                    <span class="round-tab">3</span> <i>Paso 3</i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
+                                                    <form id="wizardForm"
+                                                          th:action="@{/excelP/{eventoId}(eventoId=${evento.idevento})}"
+                                                          method="post"
+                                                          enctype="multipart/form-data">
+                                                        <div class="tab-content" id="main_form">
+                                                            <!-- Paso 1 -->
+                                                            <div class="tab-pane active" role="tabpanel" id="step1">
+                                                                <div class="row justify-content-center">
+                                                                    <label class="custom-label">Subir Excel</label>
+                                                                    <input class="form-control" type="file"
+                                                                           name="archivo" required
+                                                                           accept=".csv, .xls, .xlsx">
+                                                                    <input type="hidden" name="eventoId"
+                                                                           th:value="${eventoId}">
+                                                                </div>
+                                                                <br>
+                                                                <ul class="list-inline pull-right">
+                                                                    <li>
+                                                                        <button type="submit"
+                                                                                class="btn btn-success">Subir
+                                                                        </button>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                            
-                                                            <label for="participantes">Agregar Participantes:</label>
-                                                            <form action="/subirArchivo/excel" method="post"
-                                                                  enctype="multipart/form-data">
-                                                                  
-                                                                  <input type="file" name="archivo"
-                                                                        accept=".xls,.xlsx" required>
-                                                                  <input type="hidden" name="eventoId"
-                                                                        th:value="${evento.idevento}">
-                                                                  <button type="submit"
-                                                                        class="btn btn-primary btn-circle btn-sm">
-                                                                        <i class="fas fa-user-plus"></i>
-                                                                  </button>
-                                                            </form>
-                                                            <!-- Botón para subir imagen -->
-                                                              <label for="imagen">Agregar Imagen de Fondo:</label>
-                                                            <!-- Botón para subir imagen -->
-                                                            <form action="/subirArchivo/imagen" method="post"
-                                                                  enctype="multipart/form-data">
-                                                                  <input type="file" name="imagen" accept="image/*">
-                                                                  <input type="hidden" name="eventoId"
-                                                                        th:value="${evento.idevento}">
-                                                                  <button type="submit"
-                                                                        class="btn btn-warning btn-circle btn-sm">
-                                                                        <i class="fas fa-image"></i>
-                                                                  </button>
-                                                            </form>
 
-                                                            <form class="user" method="post"
-                                                                  th:action="@{/guardarElementos}"
-                                                                  th:object="${evento}">
-                                                                  <div class="form-group">
-                                                                        <input type="hidden" th:field="*{idevento}" />
-
-                                                                        <label for="unidad">Unidad</label>
-                                                                        <select class="form-control" id="unidad"
-                                                                              name="unidadId">
-                                                                              <option th:each="unidad : ${unidades}"
-                                                                                    th:value="${unidad.idunidad}"
-                                                                                    th:text="${unidad.nombre}"></option>
-                                                                        </select>
-
-                                                                  </div>
-
-                                                                  <button type="submit"
-                                                                        class="btn btn-primary btn-user btn-block">Guardar
-                                                                  </button>
-                                                                  <a href="/"
-                                                                        class="btn btn-secondary btn-user btn-block">Cancelar</a>
-                                                                  <p><br></p>
-                                                                  <div th:if="${error}" class="alert alert-danger">
-                                                                        <p th:text="${error}"></p>
-                                                                  </div>
-
-                                                            </form>
+                                                            <!-- Paso 2 -->
+                                                            <div class="tab-pane" role="tabpanel" id="step2">
+                                                                <div class="row justify-content-center">
+                                                                    <label class="custom-label">Autoridades
+                                                                        Identificadas</label>
+                                                                    <div th:each="autoridad : ${autoridades}">
+                                                                        <p th:text="${autoridad.nombre} + ' ' + ${autoridad.paterno}"></p>
+                                                                    </div>
+                                                                </div>
+                                                                <ul class="list-inline pull-right">
+                                                                    <li>
+                                                                        <button type="button"
+                                                                                class="btn btn-info prev-step">Atrás
+                                                                        </button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button type="submit"
+                                                                                class="btn btn-success">Finalizar
+                                                                        </button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </form>
 
 
-
-
-
-
-
-                                                      </div>
                                                 </div>
-                                          </div>
+                                            </div>
+                                        </div>
                                     </div>
-                              </div>
+                                </section>
+
+
+                            </div>
                         </div>
-                  </div>
-                  <!-- End of Main Content -->
-
-                  <!-- Footer -->
-                  <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
-
-                  <!-- End of Footer -->
+                    </div>
+                </div>
             </div>
-            <!-- End of Content Wrapper -->
-      </div>
-      <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Main Content -->
 
+        <!-- Footer -->
+        <footer th:replace="~{plantilla/plantilla :: footer}"></footer>
+
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" th:src="@{/js/steps.js}"></script>
 
 </body>
 

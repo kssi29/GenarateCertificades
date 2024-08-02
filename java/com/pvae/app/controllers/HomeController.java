@@ -1,14 +1,13 @@
 package com.pvae.app.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.validation.Valid;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import com.pvae.app.models.EventoModel;
 import com.pvae.app.models.ParticipanteModel;
@@ -16,9 +15,16 @@ import com.pvae.app.models.UnidadModel;
 import com.pvae.app.repositories.CertificadoRepository;
 import com.pvae.app.servicies.EventoService;
 import com.pvae.app.servicies.UnidadService;
+import com.pvae.app.servicies.SubirArchivoService;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Controller
 public class HomeController {
@@ -27,15 +33,19 @@ public class HomeController {
     private final CertificadoRepository certificadoRepository;
     private final UnidadService unidadService;
 
+    private final String id = "id";
+
+
     public HomeController(EventoService eventoService, CertificadoRepository certificadoRepository,
-            UnidadService unidadService) {
+                          UnidadService unidadService) {
         this.eventoService = eventoService;
         this.certificadoRepository = certificadoRepository;
         this.unidadService = unidadService;
+
     }
 
     private final String attributeNameTitulo = "titulo";
-    private  final String attributeNameEvento = "evento";
+    private final String attributeNameEvento = "evento";
 
     @GetMapping("/")
     public String listarEventos(Model model) {
@@ -44,96 +54,66 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/crear")
-    public String crearEvento(Model model) {
-        EventoModel evento = new EventoModel();
-        List<EventoModel> listaEventos = eventoService.listarEventos();
-        model.addAttribute(attributeNameTitulo, "Crear Evento");
-        model.addAttribute(attributeNameEvento, evento);
-        model.addAttribute("listaEventos", listaEventos);
-        return "crear";
-    }
 
     @GetMapping("/crearSteps")
     public String crearSteps(Model model) {
+        System.out.println("Se presionó el botón de crear evento");
         EventoModel evento = new EventoModel();
         List<EventoModel> listaEventos = eventoService.listarEventos();
+        List<UnidadModel> listaUnidades = unidadService.listarUnidades();
         model.addAttribute(attributeNameTitulo, "Crear nuevo Evento");
         model.addAttribute(attributeNameEvento, evento);
         model.addAttribute("listaEventos", listaEventos);
+        model.addAttribute("unidades", listaUnidades);
         return "steps";
     }
 
-    @PostMapping("/guardar")
-    public String guardarEvento(@Valid @ModelAttribute("evento") EventoModel evento, Model model) {
-        List<EventoModel> listaEventos = eventoService.listarEventos();
+    @PostMapping("/guardarEvento")
+    public String guardarEvento(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("unidadId") Long unidadId,
+            @RequestParam("imagenFondo") MultipartFile imagenFondo,
+            Model model) {
 
-        for (EventoModel eventito : listaEventos) {
-            if (eventito.getNombre().equals(evento.getNombre())
-                    && !eventito.getIdevento().equals(evento.getIdevento())) {
-                String errorMessage = "Ya existe un evento con el nombre proporcionado.";
-                String attributeNameError = "error";
-                model.addAttribute(attributeNameError, errorMessage);
-                model.addAttribute(attributeNameTitulo, "Crear Evento");
-                model.addAttribute(attributeNameEvento, evento);
-                model.addAttribute("listaEventos", listaEventos);
-                return "crear";
+        try {
+            EventoModel evento = new EventoModel();
+            evento.setNombre(nombre);
+
+            UnidadModel unidad = unidadService.buscarUnidad(unidadId);
+            evento.setUnidad(unidad);
+
+
+            EventoModel eventoGuardado = eventoService.guardarEvento(evento);
+
+            if (imagenFondo != null && !imagenFondo.isEmpty()) {
+                String directorioDestino = "C:/workspace/app/src/main/resources/static/Recursos/Fondos/";
+                String nombreArchivo = eventoGuardado.getIdevento() + "_" + imagenFondo.getOriginalFilename();
+                Path rutaCompleta = Paths.get(directorioDestino + nombreArchivo);
+                Files.write(rutaCompleta, imagenFondo.getBytes());
+
+                eventoGuardado.setImagenFondo(nombreArchivo);
+                eventoService.guardarEvento(eventoGuardado);
             }
-        }
-        eventoService.guardarEvento(evento);
-        return "redirect:/";
-    }
 
-    @PostMapping("/guardarSupremo")
-    public String guardarSupremo(@ModelAttribute("evento") EventoModel evento, Model model) {
-        List<EventoModel> listaEventos = eventoService.listarEventos();
-        for (EventoModel eventito : listaEventos) {
-            if (eventito.getNombre().equals(evento.getNombre())
-                    && !eventito.getIdevento().equals(evento.getIdevento())) {
-                String errorMessage = "Ya existe un evento con el nombre proporcionado.";
-                String attributeNameError = "error";
-                model.addAttribute(attributeNameError, errorMessage);
-                model.addAttribute(attributeNameEvento, evento);
-                model.addAttribute("listaEventos", listaEventos);
-                return "crear";
-            }
+            return "redirect:/";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Hubo un problema al guardar el evento. Inténtalo de nuevo.");
+            return "crear";
         }
-        eventoService.guardarEvento(evento);
-        return "redirect:/";
     }
 
 
-    @PostMapping("/guardarElementos")
-    public String guardarElementos(@Valid @ModelAttribute("evento") EventoModel evento,
-                                   @RequestParam("unidadId") Long unidadId,
-                                   Model model) {
-        System.err.println("Se presionó el botón de guardar elementos");
-    
-        // Obtener el evento existente por su ID
-        EventoModel eventoExistente = eventoService.buscarEvento(evento.getIdevento());
-    
-        if (eventoExistente == null) {
-            System.err.println("No se encontró el evento con ID: " + evento.getIdevento());
-            return "redirect:/"; // Redirigir a donde corresponda en tu lógica de aplicación
-        }
-    
-        // Buscar la unidad por su ID
-        UnidadModel unidad = unidadService.buscarUnidad(unidadId);
-    
-        // Asociar la unidad al evento si no está ya asociada
-        if (eventoExistente.getUnidad() == null) {
-            eventoExistente.setUnidad(unidad);
-            System.out.println("Unidad asociada al evento correctamente.");
-        } else {
-            System.out.println("El evento ya tiene una unidad asociada.");
-        }
-    
-        // Guardar el evento actualizado
-        eventoService.guardarEvento(eventoExistente);
-    
-        return "redirect:/";
+    @PostMapping("/validarNombreEvento")
+    public ResponseEntity<Map<String, Object>> validateEventName(@RequestParam String name) {
+        boolean nombreExistente = eventoService.buscarEventoPorNombre(name) != null;
+        Map<String, Object> response = new HashMap<>();
+        response.put("valido", !nombreExistente);
+        return ResponseEntity.ok(response);
     }
-    
+
+
     @GetMapping("/editar/{id}")
     public String editarUnidad(@PathVariable("id") Long idevento, Model model) {
 
@@ -146,15 +126,13 @@ public class HomeController {
     }
 
     @GetMapping("/agregar/{id}")
-    public String agregarElementos(@PathVariable("id") Long idevento, Model model) {
-
+    public String agregarParticipantes(@PathVariable("id") Long idevento, Model model) {
         EventoModel evento = eventoService.buscarEvento(idevento);
-        List<UnidadModel> listaUnidades = unidadService.listarUnidades();
-        model.addAttribute(attributeNameTitulo, "Agregar Elementos al " + evento.getNombre());
-        model.addAttribute(attributeNameEvento, evento);
-        model.addAttribute("unidades", listaUnidades);
+        model.addAttribute("titulo", "Agregar partipantes a: " + evento.getNombre());
+        model.addAttribute("evento", evento);
         return "agregar";
     }
+
 
     @GetMapping("/eliminar/{id}")
     public String eliminarUnidad(@PathVariable("id") Long idevento, Model model) {
@@ -163,17 +141,30 @@ public class HomeController {
     }
 
     @GetMapping("/listarParticipantesPorEvento/{id}")
-    public String listarParticipantesPorEvento(@PathVariable("id") Long eventoId, Model model) {
+    public String listarParticipantesPorEvento(@PathVariable(id) Long eventoId, Model model) {
         List<ParticipanteModel> listaParticipantes = certificadoRepository.findParticipantesByEventoId(eventoId);
         model.addAttribute(attributeNameTitulo, "Listado de Participantes para el evento " + eventoId);
         model.addAttribute("listaparticipantes", listaParticipantes);
         return "consultas/participantes/participante";
     }
 
-    /*
-    @GetMapping("/steps/{id}")
-    public String steps(@PathVariable("id") Long idevento, Model model) {
-        return "steps";
+    @PostMapping("/excelP/{eventoId}")
+    public String manejaSubidaExcel(@RequestParam("archivo") MultipartFile archivo,
+                                    @PathVariable("eventoId") Long eventoId, Model model) {
+        if (archivo.isEmpty()) {
+            model.addAttribute("error", "Archivo vacío");
+            return "redirect:/agregar/" + eventoId;
+        }
+        String resultadoProcesamiento = eventoService.procesarYGuardarExcel(archivo, eventoId, model);
+        if (resultadoProcesamiento.startsWith("Error")) {
+            model.addAttribute("error", resultadoProcesamiento);
+            return "redirect:/agregar/" + eventoId;
+        }
+
+
+
+        return "redirect:/agregar/" + eventoId + "#step2";
+
     }
-*/
+
 }

@@ -9,48 +9,37 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "participante")
-public class ParticipanteModel extends PersonaModel{
+public class ParticipanteModel extends PersonaModel {
     private String tipo;
-    
+
     @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL)
     private List<CertificadoModel> certificados;
 
     public ParticipanteModel() {
-    
+
     }
 
 
-    public ParticipanteModel(String tipo, int ci, String email,  String materno, String nombre, String paterno) {
-        super(ci, email,  materno, nombre, paterno);
-        this.tipo = tipo;
-    }
-    public ParticipanteModel(String tipo, int ci, String email,  String materno, String nombre, String paterno, List<CertificadoModel> certificados) {
-        super(ci, email,  materno, nombre, paterno);
-        this.tipo = tipo;
-        this.certificados = certificados;
-        
-    }
-
-    public String getNombre(){
+    public String getNombre() {
         return super.getnombre();
     }
 
-    public String getPaterno(){
+    public String getPaterno() {
         return this.getpaterno();
     }
 
-    public String getMaterno(){
+    public String getMaterno() {
         return this.getmaterno();
-    }   
-    public int getCi(){
+    }
+
+    public int getCi() {
         return this.getci();
-    }   
-    public String getEmail(){
+    }
+
+    public String getEmail() {
         return this.getemail();
     }
 
-    
-    
 
     public String getTipo() {
         return tipo;
@@ -79,8 +68,6 @@ public class ParticipanteModel extends PersonaModel{
         certificados.remove(certificado);
         certificado.setParticipante(null);
     }
-    
 
-    
 
 }

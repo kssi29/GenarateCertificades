@@ -28,41 +28,17 @@ public class EventoModel {
     @Column(name = "imagen_fondo", nullable = true)
     private String imagenFondo;
 
-
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List<CertificadoModel> certificados = new ArrayList<>();;
-
-
     @ManyToOne
     @JoinColumn(name = "unidad_id",referencedColumnName = "idunidad")
     private UnidadModel unidad;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List<FirmaModel> firmas = new ArrayList<>();
+    private List<CertificadoModel> certificados = new ArrayList<>();
+
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    private List<FirmaCertModel> firmaCerts = new ArrayList<>();
 
 
-
-   
-/*
-    @ManyToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(
-        name = "emite",
-        joinColumns = @JoinColumn(name = "evento_id", referencedColumnName = "idevento"),
-        inverseJoinColumns = @JoinColumn(name = "unidad_id", referencedColumnName = "idunidad")
-    )
-    private List<UnidadModel> unidades = new ArrayList<>();
-*/
-
-
-
-
-    public EventoModel() {
-    }
-  
-
-    public EventoModel(String nombre) {
-        this.nombre = nombre;
-    }
 
 
 
@@ -86,15 +62,6 @@ public class EventoModel {
         this.nombre = nombre;
     }
 
-
-    public List<FirmaModel> getFirmas() {
-        return firmas;
-    }
-
-
-    public void setFirmas(List<FirmaModel> firmas) {
-        this.firmas = firmas;
-    }
 
 
     public List<CertificadoModel> getCertificados() {

@@ -17,33 +17,9 @@ public class CertificadoModel {
     @ManyToOne
     @JoinColumn(name = "evento_id", referencedColumnName = "idevento")
     private EventoModel evento;
-/*
- * 
- * @ManyToOne
-    @JoinColumn(name = "estado_id", referencedColumnName = "idestado")
-    private EstadoModel estado;
- */
-    
 
-      public CertificadoModel() {
-    }
 
-    public CertificadoModel(ParticipanteModel participante, EventoModel evento) {
-        this.participante = participante;
-        this.evento = evento;
-    }
 
-    public CertificadoModel(ParticipanteModel participante ){//, EstadoModel estado) {
-        this.participante = participante;
-    //    this.estado = estado;
-    }
-/* 
- * public CertificadoModel(ParticipanteModel participante, EventoModel evento , EstadoModel estado) {
-        this.participante = participante;
-        this.evento = evento;
-        this.estado = estado;
-    }
-*/
     
 
     public Long getIdcertificado() {

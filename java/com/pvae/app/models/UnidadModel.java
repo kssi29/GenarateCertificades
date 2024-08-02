@@ -41,30 +41,11 @@ public class UnidadModel {
     @ManyToOne
     @JoinColumn(name = "unidad_padre_id")
     private UnidadModel unidadPadre;
-
+/*
     @OneToMany(mappedBy = "unidad", cascade = CascadeType.ALL)
     private List<EventoModel> eventos;
- 
+ */
 
-    public UnidadModel() {
-    }
-
-    public UnidadModel(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public UnidadModel(List<EmiteModel> emites,String nombre) {
-        this.emites = emites;
-        this.nombre = nombre;
-    }
-
-    
-
-    public UnidadModel(String nombre, List<UnidadModel> subunidades) {
-
-        this.nombre = nombre;
-        this.subunidades = subunidades;
-    }
 
 
     public Long getIdunidad() {
@@ -106,14 +87,6 @@ public class UnidadModel {
 
     public void setUnidadPadre(UnidadModel unidadPadre) {
         this.unidadPadre = unidadPadre;
-    }
-
-    public List<EventoModel> getEventos() {
-        return eventos;
-    }
-
-    public void setEventos(List<EventoModel> eventos) {
-        this.eventos = eventos;
     }
 
 
