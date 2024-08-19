@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{plantilla/plantilla :: head}">
+<head th:replace="~{plantilla/plantilla2 :: head}">
       <title>Crear/Editar Evento</title>
 </head>
 
@@ -13,7 +13,7 @@
 <body>
       <div id="wrapper">
             <!-- Sidebar -->
-            <header th:replace="~{plantilla/plantilla :: sidebar}"></header>
+            <header th:replace="~{plantilla/plantilla2 :: sidebar}"></header>
 
             <!-- End of Sidebar -->
 
@@ -29,14 +29,15 @@
                                                       <div class="p-5">
                                                             <div class="text-center">
                                                                   <h1 class="h4 text-gray-900 mb-4" th:text="${titulo}">
-                                                                        Crear Nueva Evento
+
                                                                   </h1>
                                                             </div>
                                                             <form class="user" method="post" th:action="@{/guardar}"
-                                                                  th:object="${evento}">
+                                                                  th:object="${evento}"
+                                                                  enctype="multipart/form-data">
                                                                   <div class="form-group">
                                                                         <input type="hidden" th:field="*{idevento}">
-                                                                        <label for="nombre">Nombre del Evento</label>
+                                                                        <label th:for="nombre">Nombre del Evento</label>
                                                                         <input type="text"
                                                                               class="form-control form-control-user"
                                                                               th:field="*{nombre}"
@@ -44,7 +45,17 @@
                                                                         <small class="form-text text-danger"
                                                                               th:if="${#fields.hasErrors('nombre')}"
                                                                               th:errors="*{nombre}"></small>
+                                                                        <label th:for = "unidad">Unidad </label>
+                                                                        <small th:text="${evento.getUnidad().getNombre()}"></small>
+                                                                        <select class="form-control" id="unidad" name="unidadId">
+                                                                              <option th:each="unidad : ${unidades}" th:value="${unidad.idunidad}" th:text="${unidad.nombre}"></option>
+                                                                        </select>
+                                                                        <label th:for ="imagen_fondo" >Imagen de fondo</label>
+                                                                        <small th:text="${evento.getImagenFondo()}"></small>
+                                                                        <input class="form-control" type="file" name="imagenFondo" id="customFile" accept="image/*">
+
                                                                   </div>
+
 
                                                                   <button type="submit"
                                                                         class="btn btn-primary btn-user btn-block">Guardar

@@ -34,24 +34,20 @@
                                             <div class="col-md-8">
                                                 <div class="wizard">
                                                     <div class="wizard-inner">
-                                                        <div class="connecting-line"></div>
                                                         <ul class="nav nav-tabs" role="tablist">
                                                             <li role="presentation" class="active">
                                                                 <a href="#step1" data-toggle="tab" aria-controls="step1"
                                                                    role="tab" aria-expanded="true">
-                                                                    <span class="round-tab">1</span> <i>Paso 1</i>
                                                                 </a>
                                                             </li>
                                                             <li role="presentation" class="disabled">
                                                                 <a href="#step2" data-toggle="tab" aria-controls="step2"
                                                                    role="tab" aria-expanded="false">
-                                                                    <span class="round-tab">2</span> <i>Paso 2</i>
                                                                 </a>
                                                             </li>
                                                             <li role="presentation" class="disabled">
                                                                 <a href="#step3" data-toggle="tab" aria-controls="step3"
-                                                                   role="tab">
-                                                                    <span class="round-tab">3</span> <i>Paso 3</i>
+                                                                   role="tab"  aria-expanded="false">
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -66,7 +62,7 @@
                                                             <!-- Paso 1 -->
                                                             <div class="tab-pane active" role="tabpanel" id="step1">
                                                                 <div class="row justify-content-center">
-                                                                    <label class="custom-label">Subir Excel</label>
+                                                                    <label class="custom-label">Paso 1/3: Subir Excel</label>
                                                                     <input class="form-control" type="file"
                                                                            name="archivo" required
                                                                            accept=".csv, .xls, .xlsx">
@@ -74,6 +70,9 @@
                                                                            th:value="${eventoId}">
                                                                 </div>
                                                                 <br>
+                                                                <div th:if="${error}" class="alert alert-danger">
+                                                                    <p th:text="${error}"></p>
+                                                                </div>
                                                                 <ul class="list-inline pull-right">
                                                                     <li>
                                                                         <button type="submit"
@@ -86,25 +85,66 @@
                                                             <!-- Paso 2 -->
                                                             <div class="tab-pane" role="tabpanel" id="step2">
                                                                 <div class="row justify-content-center">
-                                                                    <label class="custom-label">Autoridades
+                                                                    <label class="custom-label">Paso 2/3: Autoridades
                                                                         Identificadas</label>
-                                                                    <div th:each="autoridad : ${autoridades}">
-                                                                        <p th:text="${autoridad.nombre} + ' ' + ${autoridad.paterno}"></p>
-                                                                    </div>
+                                                                    <small class="form-text text-muted">Se muestran las autoridades identificadas.</small>
+
                                                                 </div>
+                                                                <table class="table table-bordered" >
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Nombre</th>
+                                                                        <th>Cargo</th>
+                                                                        <th>Firma</th>
+                                                                        <th>Acciones</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr th:each="autoridad : ${listaAutoridades}">
+                                                                        <td th:text="${autoridad.paterno} +' '+ ${autoridad.materno}+' '+${autoridad.nombre}"></td>
+                                                                        <td th:text="${autoridad.cargo!= null ? autoridad.cargo : 'Ninguno asignado'}"></td>
+                                                                        <td th:text="${autoridad.imagenFirma!=null ? autoridad.imagenFirma : 'Ninguno asignado'}"></td>
+                                                                        <td>
+                                                                            <a th:href="@{/consultas/autoridades/editar/{idpersona}(idpersona=${autoridad.idpersona})}" class="btn btn-info btn-circle btn-sm">
+                                                                                <i class="fas fa-edit"></i>
+                                                                            </a>
+                                                                            <a th:href="@{/consultas/autoridades/eliminar/{idpersona}(idpersona=${autoridad.idpersona})}"
+                                                                               class="btn btn-danger btn-circle btn-sm">
+                                                                                <i class="fas fa-trash"></i>
+                                                                            </a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
                                                                 <ul class="list-inline pull-right">
                                                                     <li>
                                                                         <button type="button"
-                                                                                class="btn btn-info prev-step">Atrás
+                                                                                class="btn btn-info prev-step">Aniadir autoridad
                                                                         </button>
+
                                                                     </li>
                                                                     <li>
                                                                         <button type="submit"
-                                                                                class="btn btn-success">Finalizar
+                                                                                class="btn btn-success next-step">Siguiente
                                                                         </button>
                                                                     </li>
                                                                 </ul>
                                                             </div>
+                                                            <div class="tab-pane" role="tabpanel" id="step3">
+                                                                <div class="form-group">
+                                                                    <label class="custom-label"> Paso 3/3: Generar Archivo</label>
+                                                                    <small class="form-text text-muted">Deseas generar los certificados ahora?</small>
+                                                                </div>
+                                                                <br>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <a th:href="@{/}" class="btn btn-info">Finalizar</a>
+
+                                                                    <a class="btn btn-success">Generar Certificados</a>
+                                                                </div>
+                                                            </div>
+
+
                                                         </div>
                                                     </form>
 

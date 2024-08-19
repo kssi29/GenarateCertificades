@@ -19,13 +19,16 @@ import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 
 import com.pvae.app.exception.Myexception;
+import com.pvae.app.models.AutoridadModel;
 import com.pvae.app.models.EventoModel;
 import com.pvae.app.models.ParticipanteModel;
 import com.pvae.app.models.UnidadModel;
 import com.pvae.app.repositories.CertificadoRepository;
 import com.pvae.app.repositories.EventoRepository;
+import com.pvae.app.servicies.AutoridadService;
 import com.pvae.app.servicies.UnidadService;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,12 +45,14 @@ public class GeneraPDFUtil {
     private final EventoRepository eventoRepository;
     private final CertificadoRepository certificadoRepository;
     private final UnidadService unidadService;
+    private final AutoridadService autoridadService;
 
     public GeneraPDFUtil(EventoRepository eventoRepository, CertificadoRepository certificadoRepository,
-            UnidadService unidadService) {
+                         UnidadService unidadService, AutoridadService autoridadService) throws Myexception {
         this.eventoRepository = eventoRepository;
         this.certificadoRepository = certificadoRepository;
         this.unidadService = unidadService;
+        this.autoridadService = autoridadService;
     }
 
     public void generaCertificados(Long eventoId) throws Myexception {
@@ -56,6 +61,7 @@ public class GeneraPDFUtil {
                 new PdfWriter("C:\\workspace\\app\\src\\main\\resources\\static\\cosasGeneradas\\hola_mun2do.pdf"))) {
             PageSize pageSize = PageSize.A4.rotate();
             procesarDocumento(pdfDoc, pageSize, eventoId);
+            System.err.println("Estamos en generaCertificados");
 
         } catch (Exception e) {
             throw new Myexception("Error con la ruta para guardar los certificados del evento con id: " + eventoId, e);
@@ -63,29 +69,32 @@ public class GeneraPDFUtil {
 
     }
 
-    private void procesarDocumento(PdfDocument pdfDoc, PageSize pageSize, Long eventoId) throws Myexception {
+    private void procesarDocumento(PdfDocument pdfDoc, PageSize pageSize, Long eventoId) throws Myexception, MalformedURLException {
+
         try (Document doc = new Document(pdfDoc, pageSize)) {
-            List<ParticipanteModel> listaParticipantes = certificadoRepository.findParticipantesByEventoId(eventoId);
 
-            List<ParticipanteModel> autoridades = new ArrayList<>();
-            List<ParticipanteModel> receptores = new ArrayList<>();
-            separarParticipantes(listaParticipantes, autoridades, receptores);
-
-            System.out.println("recpetores size: " + receptores.size());
-            for (int i = 0; i < receptores.size(); i++) {
-                ParticipanteModel participante = receptores.get(i);
+            List<ParticipanteModel> participantes = certificadoRepository.findParticipantesByEventoId(eventoId);
+            //por ahora
+            List<AutoridadModel> autoridades = autoridadService.listarAutoridades();
+            for (int i = 0; i < participantes.size(); i++) {
+                ParticipanteModel participante = participantes.get(i);
 
                 PdfCanvas canvas = new PdfCanvas(pdfDoc.addNewPage());
                 canvas.addImageFittedIntoRectangle(ImageDataFactory.create(buscarImagenFondoPath(eventoId)), pageSize,
                         false);
 
-                aniadirElementosPDF(eventoId, doc, participante, autoridades, i, receptores.size());
+                aniadirElementosPDF(eventoId, doc, participante, autoridades);
             }
-        } catch (Exception e) {
+
+
+        } catch (
+                Exception e) {
             throw new Myexception("Error al generar el docuemnto del evento con la id: " + eventoId, e);
         }
-    }
 
+
+    }
+/*
     private void separarParticipantes(List<ParticipanteModel> listaParticipantes, List<ParticipanteModel> autoridades,
             List<ParticipanteModel> receptores) {
         for (ParticipanteModel participante : listaParticipantes) {
@@ -97,18 +106,27 @@ public class GeneraPDFUtil {
         }
     }
 
+ */
+
+    /*  public void aniadirElementosPDF(Long eventoid, Document document, ParticipanteModel participante,
+              List<ParticipanteModel> autoridades, int index, int totalRecibe) {
+
+     */
     public void aniadirElementosPDF(Long eventoid, Document document, ParticipanteModel participante,
-            List<ParticipanteModel> autoridades, int index, int totalRecibe) {
+                                    List<AutoridadModel> autoridades) {
         try {
 
             document.add(encabezadoTable(eventoid));
             document.add(cuerpoTable(participante));
             document.add(ponerFirmas(autoridades));
 
+            /*
             if (index < totalRecibe - 1) {
                 document.add(new AreaBreak());
                 System.out.println("index: " + index + " totalRecibe: " + (totalRecibe - 1));
             }
+
+             */
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,9 +146,9 @@ public class GeneraPDFUtil {
             for (UnidadModel unidadPadre : unidadesPadres) {
                 headerTable.addCell(createCellUp(unidadPadre.getNombre(), TextAlignment.CENTER, 1, 1));
             }
-        
+
             headerTable.addCell(createCellUp(evento.getNombre(), TextAlignment.CENTER, 1, 1));
-        
+
         } else {
             System.out.println("No se encontró ningún evento con el ID: " + eventoid);
         }
@@ -156,13 +174,13 @@ public class GeneraPDFUtil {
 
     }
 
-    private Table ponerFirmas(List<ParticipanteModel> autoridades) {
+    private Table ponerFirmas(List<AutoridadModel> autoridades) {
         Table firmasTable = new Table(autoridades.size());
         firmasTable.setWidth(750);
         firmasTable.setBorder(Border.NO_BORDER);
 
         try {
-            for (ParticipanteModel autoridad : autoridades) {
+            for (AutoridadModel autoridad : autoridades) {
 
                 Table innerTable = new Table(1);
                 innerTable.setWidth(UnitValue.createPercentValue(100));

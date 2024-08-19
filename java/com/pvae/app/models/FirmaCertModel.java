@@ -3,7 +3,7 @@ package com.pvae.app.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "firmaCertificado")
+@Table(name = "firma")
 public class FirmaCertModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,8 +11,8 @@ public class FirmaCertModel {
     private Long idfirmaCertificado;
 
     @ManyToOne
-    @JoinColumn(name = "evento_id", referencedColumnName = "idevento")
-    private EventoModel evento;
+    @JoinColumn(name = "certificado_id", referencedColumnName = "idcertificado")
+    private CertificadoModel certificado;
 
     @ManyToOne
     @JoinColumn(name = "autoridad_id", referencedColumnName = "idpersona")
@@ -22,16 +22,12 @@ public class FirmaCertModel {
         return idfirmaCertificado;
     }
 
-    public void setIdfirmaCertificado(Long idfirmaCertificado) {
-        this.idfirmaCertificado = idfirmaCertificado;
+    public CertificadoModel getCertificado() {
+        return certificado;
     }
 
-    public EventoModel getEvento() {
-        return evento;
-    }
-
-    public void setEvento(EventoModel evento) {
-        this.evento = evento;
+    public void setCertificado(CertificadoModel certificado) {
+        this.certificado = certificado;
     }
 
     public AutoridadModel getAutoridad() {

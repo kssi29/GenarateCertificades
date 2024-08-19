@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface EventoRepository extends CrudRepository<EventoModel, Long>{
+    List<EventoModel> findAllByOrderByIdeventoAsc();
 
 
 

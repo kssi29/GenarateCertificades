@@ -12,8 +12,8 @@ import com.pvae.app.util.GeneraPDFUtil;
 
 @Controller
 public class CertificadoController {
-     private final GeneraPDFUtil generaPDFUtil;
-     
+    private final GeneraPDFUtil generaPDFUtil;
+
 
     public CertificadoController(GeneraPDFUtil generaPDFUtil) {
         this.generaPDFUtil = generaPDFUtil;
@@ -26,13 +26,13 @@ public class CertificadoController {
             System.err.println("Generando certificados para el evento con ID: " + eventoId);
             generaPDFUtil.generaCertificados(eventoId);
         } catch (Exception e) {
-   
+
             e.printStackTrace();
         }
 
 
-        return "redirect:/"; 
+        return "redirect:/";
     }
-    
-      
+
+
 }

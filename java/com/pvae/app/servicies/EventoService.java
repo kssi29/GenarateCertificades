@@ -2,16 +2,19 @@ package com.pvae.app.servicies;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import com.pvae.app.models.AutoridadModel;
-import com.pvae.app.models.ParticipanteModel;
+import com.pvae.app.models.*;
+import com.pvae.app.repositories.AutoridadRepository;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
-
-import com.pvae.app.models.EventoModel;
 
 import com.pvae.app.repositories.EventoRepository;
 
@@ -27,24 +30,33 @@ public class EventoService {
     private final ParticipanteService participanteService;
     private final AutoridadService autoridadService;
     private final FirmaCertService firmaCertService;
+    private final AutoridadRepository autoridadRepository;
+    private final UnidadService unidadService;
+    private static final String DIRECTORIO_DESTINO = "C:/workspace/app/src/main/resources/static/Recursos/Fondos/";
 
-    public EventoService(EventoRepository eventoRepository, CertificadoService certificadoService, ParticipanteService participanteService, AutoridadService autoridadService, FirmaCertService firmaCertService) {
+
+    public EventoService(EventoRepository eventoRepository, CertificadoService certificadoService,
+                         ParticipanteService participanteService, AutoridadService autoridadService,
+                         FirmaCertService firmaCertService, AutoridadRepository autoridadRepository, UnidadService unidadService) {
         this.eventoRepository = eventoRepository;
         this.certificadoService = certificadoService;
         this.participanteService = participanteService;
         this.autoridadService = autoridadService;
         this.firmaCertService = firmaCertService;
+        this.autoridadRepository = autoridadRepository;
+        this.unidadService = unidadService;
     }
 
     public List<EventoModel> listarEventos() {
-
-        return (List<EventoModel>) eventoRepository.findAll();
+        return eventoRepository.findAllByOrderByIdeventoAsc();
     }
+
 
     public EventoModel buscarEvento(Long id) {
 
         return eventoRepository.findById(id).orElse(null);
     }
+
 
     public EventoModel buscarEventoPorNombre(String nombre) {
         List<EventoModel> listaEventos = (List<EventoModel>) this.eventoRepository.findAll();
@@ -56,19 +68,15 @@ public class EventoService {
         return null;
     }
 
-    @Transactional
-    public EventoModel guardarEvento(EventoModel evento) {
-        eventoRepository.save(evento);
-        return evento;
-    }
 
     @Transactional
     public void eliminarEvento(Long idevento) {
         eventoRepository.deleteById(idevento);
     }
 
+
     @Transactional
-    public String procesarYGuardarExcel(MultipartFile archivo, Long eventoId, Model model) {
+    public boolean procesarYGuardarExcel(MultipartFile archivo, Long eventoId, Model model) {
         try {
             System.err.println("\nEstamos procesar y guardar el excel");
             EventoModel evento = buscarEvento(eventoId);
@@ -78,11 +86,12 @@ public class EventoService {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = sheet.iterator();
 
+            Map<Long, CertificadoModel> certificadosMap = new HashMap<>();
+            Map<Long, AutoridadModel> autoridadesMap = new HashMap<>();
+
             if (iterator.hasNext()) {
                 iterator.next();
             }
-
-            List<AutoridadModel> autoridades = null;
             while (iterator.hasNext()) {
                 Row currentRow = iterator.next();
                 Iterator<Cell> cellIterator = currentRow.iterator();
@@ -93,25 +102,106 @@ public class EventoService {
                 String materno = cellIterator.next().getStringCellValue();
                 String nombre = cellIterator.next().getStringCellValue();
                 String tipo = String.valueOf((int) cellIterator.next().getNumericCellValue());
+
+                AutoridadModel autoridadExiste = autoridadRepository.findByCi(ci);
                 if (tipo.equals("0")) {
-                    AutoridadModel autoridad = autoridadService.obtenerAutoridades(ci, email, paterno, materno, nombre);
-                    firmaCertService.ligarFirmaCert(evento, autoridad);
+                    if (autoridadExiste == null) {
+                        AutoridadModel autoridad = autoridadService.guardaAutoridad(ci, email, paterno, materno, nombre);
+                        autoridadesMap.put(autoridad.getIdpersona(), autoridad);
+                    } else {
+                        autoridadesMap.put(autoridadExiste.getIdpersona(), autoridadExiste);
+                    }
+
+
                 } else {
+
                     ParticipanteModel participante = participanteService.obtenerOPersistirParticipante(ci, email, paterno, materno, nombre, tipo);
-                    certificadoService.guardarCertificado(evento, participante);
+                    if (!certificadoService.existeCertificado(participante.getIdpersona(), evento.getIdevento())) {
+                        CertificadoModel certificado = certificadoService.guardarCertificado(evento, participante);
+                        certificadosMap.put(certificado.getIdcertificado(), certificado);
+                    }
+
                 }
             }
-
             workbook.close();
             inputStream.close();
 
-            model.addAttribute("autoridades", autoridades);
-            model.addAttribute("eventoId", eventoId);
+            asociarFirmas(certificadosMap, autoridadesMap);
 
-            return "Se han guardado exitosamente los participantes desde el archivo Excel para el evento con id " + eventoId;
+            return true;
+
         } catch (IOException | EncryptedDocumentException ex) {
-            return "Error al procesar el archivo Excel: " + ex.getMessage();
+            System.err.println(ex.getMessage());
+            model.addAttribute("error", "Error al procesar el archivo Excel: " + ex.getMessage());
+            return false;
         }
+    }
+
+
+    public EventoModel guardarEventoConImagen(String nombre, Long unidadId, MultipartFile imagenFondo) throws IOException {
+        EventoModel evento = new EventoModel();
+        evento.setNombre(nombre);
+
+        UnidadModel unidad = unidadService.buscarUnidad(unidadId);
+        evento.setUnidad(unidad);
+
+        EventoModel eventoGuardado = eventoRepository.save(evento);
+        return procesarImagenYGuardarEvento(eventoGuardado, imagenFondo);
+    }
+
+
+    public EventoModel actualizarEventoConImagen(Long idevento, String nombre, Long unidadId, MultipartFile imagenFondo) throws IOException {
+        EventoModel evento = eventoRepository.findById(idevento)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado con ID: " + idevento));
+        evento.setNombre(nombre);
+
+        UnidadModel unidad = unidadService.buscarUnidad(unidadId);
+        evento.setUnidad(unidad);
+
+        EventoModel eventoGuardado = eventoRepository.save(evento);
+        return procesarImagenYGuardarEvento(eventoGuardado, imagenFondo);
+    }
+
+
+    private EventoModel procesarImagenYGuardarEvento(EventoModel evento, MultipartFile imagenFondo) throws IOException {
+        if (imagenFondo != null && !imagenFondo.isEmpty()) {
+            String nombreArchivo = evento.getIdevento() + "_" + imagenFondo.getOriginalFilename();
+            Path rutaCompleta = Paths.get(DIRECTORIO_DESTINO + nombreArchivo);
+            Files.write(rutaCompleta, imagenFondo.getBytes());
+
+            evento.setImagenFondo(nombreArchivo);
+            evento = eventoRepository.save(evento);
+        }
+        return evento;
+    }
+
+
+    private void asociarFirmas(Map<Long, CertificadoModel> certificadosMap, Map<Long, AutoridadModel> autoridadesMap) {
+        for (Map.Entry<Long, CertificadoModel> certificadoEntry : certificadosMap.entrySet()) {
+            Long certificadoId = certificadoEntry.getKey();
+            CertificadoModel certificado = certificadoEntry.getValue();
+
+            for (Map.Entry<Long, AutoridadModel> autoridadEntry : autoridadesMap.entrySet()) {
+                Long autoridadId = autoridadEntry.getKey();
+                AutoridadModel autoridad = autoridadEntry.getValue();
+
+                if (certificado != null && autoridad != null) {
+                    FirmaCertModel firma = new FirmaCertModel();
+                    firma.setCertificado(certificado);
+                    firma.setAutoridad(autoridad);
+
+                    firmaCertService.guardarFirmaCert(firma);
+                } else {
+                    if (certificado == null) {
+                        System.err.println("Certificado nulo para ID: " + certificadoId);
+                    }
+                    if (autoridad == null) {
+                        System.err.println("Autoridad nula para ID: " + autoridadId);
+                    }
+                }
+            }
+        }
+
     }
 
 

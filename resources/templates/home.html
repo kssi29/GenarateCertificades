@@ -41,7 +41,7 @@
                                 <th>Unidad</th>
                                 <th>Plantilla</th>
                                 <th>Acciones</th>
-                                <th>Participantes</th>
+                                <th>Consultas</th>
 
                             </tr>
                             </thead>
@@ -50,7 +50,9 @@
                             <tr th:each="evento : ${listaeventos}">
                             <!--  <td th:text="${evento.idevento}"></td>  -->
                                 <td th:text="${evento.nombre}"></td>
-                                <td th:text="${evento.getUnidad().getNombre()}"></td>
+                                <td th:text="${evento.getUnidad() != null ? evento.getUnidad().getNombre() : 'Nombre no disponible'}"></td>
+
+                         <!--        <td th:text="${evento.getUnidad().getNombre()}"></td> -->
                                 <td th:text="${evento.getImagenFondo()}"></td>
                                 <td>
                                     <!-- Botón para editar evento -->
@@ -58,21 +60,20 @@
                                        class="btn btn-info btn-circle btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <!-- Botón para eliminar evento -->
+                                    <!-- Botón para eliminar evento
                                     <a th:href="@{/eliminar/{idevento}(idevento=${evento.idevento})}"
                                        class="btn btn-danger btn-circle btn-sm">
                                         <i class="fas fa-trash"></i>
                                     </a>
+                                    -->
                                     <a th:href="@{/agregar/{idevento}(idevento=${evento.idevento})}"
                                        class="btn btn-dark btn-circle btn-sm">
                                         <i class="fas fa-plus"></i>
                                     </a>
 
                                     <!-- Botón para generar certificados -->
-                                    <a th:href="@{/generarCertificados/{eventoId}(eventoId=${evento.idevento})}"
-                                       class="btn btn-warning btn-circle btn-sm">
-                                        <i class="fas fa-certificate"></i>
-                                    </a>
+
+
 
 
                                 </td>

@@ -12,8 +12,12 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class CertificadoService {
-    @Autowired
-    private CertificadoRepository certificadoRepository;
+    private final CertificadoRepository certificadoRepository;
+
+    public CertificadoService(CertificadoRepository certificadoRepository) {
+        this.certificadoRepository = certificadoRepository;
+    }
+
 
     public List<CertificadoModel> listarCertificados() {
         return (List<CertificadoModel>) certificadoRepository.findAll();
@@ -25,6 +29,7 @@ public class CertificadoService {
 
     @Transactional
     public void guardarCertificado(CertificadoModel certificado) {
+
         certificadoRepository.save(certificado);
     }
 
@@ -34,20 +39,22 @@ public class CertificadoService {
     }
 
     @Transactional
-    public void guardarCertificado(EventoModel evento, ParticipanteModel participante) {
+    public CertificadoModel guardarCertificado(EventoModel evento, ParticipanteModel participante) {
         CertificadoModel certificado = new CertificadoModel();
         certificado.setEvento(evento);
         certificado.setParticipante(participante);
-        certificadoRepository.save(certificado);
+        return certificadoRepository.save(certificado);
 
 
     }
 
-
-
-    public CertificadoModel buscarCertificadoPorEventoYParticipante(EventoModel evento, ParticipanteModel participante) {
-        return certificadoRepository.findByEventoAndParticipante(evento, participante);
+    public boolean existeCertificado(Long participanteId, Long eventoId) {
+        return certificadoRepository.existsByParticipante_IdpersonaAndEvento_Idevento(participanteId, eventoId);
     }
+
+
+
+
 
 
 }

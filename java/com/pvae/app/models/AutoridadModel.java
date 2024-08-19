@@ -9,12 +9,28 @@ import jakarta.persistence.*;
 @Table(name = "autoridad")
 public class AutoridadModel extends PersonaModel {
     private String cargo;
+
+    @OneToMany(mappedBy = "autoridad")
+    private List<FirmaCertModel> firmaCerts;
+
     @Column(name = "imagen_firma", nullable = true)
     private String imagenFirma;
 
 
+
+
+
+    /*
     @OneToMany(mappedBy = "autoridad", cascade = CascadeType.ALL)
     private List<FirmaCertModel> firmanCertificados;
+
+
+
+     */
+
+    public Long getIdPersona(){
+        return super.getIdpersona();
+    }
 
 
     public String getNombre() {
@@ -45,11 +61,11 @@ public class AutoridadModel extends PersonaModel {
         this.cargo = cargo;
     }
 
-    public List<FirmaCertModel> getFirmanCertificados() {
-        return firmanCertificados;
+    public String getImagenFirma() {
+        return imagenFirma;
     }
 
-    public void setFirmanCertificados(List<FirmaCertModel> firmanCertificados) {
-        this.firmanCertificados = firmanCertificados;
+    public void setImagenFirma(String imagenFirma) {
+        this.imagenFirma = imagenFirma;
     }
 }

@@ -2,6 +2,8 @@ package com.pvae.app.servicies;
 
 import java.util.List;
 
+import com.pvae.app.models.AutoridadModel;
+import com.pvae.app.repositories.AutoridadRepository;
 import org.springframework.stereotype.Service;
 
 import com.pvae.app.models.ParticipanteModel;
@@ -13,9 +15,11 @@ import jakarta.transaction.Transactional;
 public class ParticipanteService {
 
     private final ParticipanteRepository participanteRepository;
+    private final AutoridadRepository autoridadRepository;
 
-    public ParticipanteService(ParticipanteRepository participanteRepository) {
+    public ParticipanteService(ParticipanteRepository participanteRepository, AutoridadRepository autoridadRepository) {
         this.participanteRepository = participanteRepository;
+        this.autoridadRepository = autoridadRepository;
     }
 
     public List<ParticipanteModel> listarParticipantes() {
@@ -41,9 +45,10 @@ public class ParticipanteService {
     public ParticipanteModel obtenerOPersistirParticipante(int ci, String email, String paterno, String materno,
                                                            String nombre, String tipo) {
 
-        ParticipanteModel participante = participanteRepository.findByCi(ci);
+        ParticipanteModel participante = participanteRepository.findByCiAndTipo(ci,tipo);
 
-        if (participante == null) {
+
+        if (participante == null ) {
 
             participante = new ParticipanteModel();
             participante.setci(ci);

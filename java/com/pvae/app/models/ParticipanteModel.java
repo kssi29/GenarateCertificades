@@ -15,11 +15,6 @@ public class ParticipanteModel extends PersonaModel {
     @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL)
     private List<CertificadoModel> certificados;
 
-    public ParticipanteModel() {
-
-    }
-
-
     public String getNombre() {
         return super.getnombre();
     }
@@ -57,16 +52,6 @@ public class ParticipanteModel extends PersonaModel {
 
     public void setCertificados(List<CertificadoModel> certificados) {
         this.certificados = certificados;
-    }
-
-    public void addCertificado(CertificadoModel certificado) {
-        certificados.add(certificado);
-        certificado.setParticipante(this);
-    }
-
-    public void removeCertificado(CertificadoModel certificado) {
-        certificados.remove(certificado);
-        certificado.setParticipante(null);
     }
 
 

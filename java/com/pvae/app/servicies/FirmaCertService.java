@@ -1,6 +1,7 @@
 package com.pvae.app.servicies;
 
 import com.pvae.app.models.AutoridadModel;
+import com.pvae.app.models.CertificadoModel;
 import com.pvae.app.models.EventoModel;
 import com.pvae.app.models.FirmaCertModel;
 import com.pvae.app.repositories.FirmaCertRepository;
@@ -38,9 +39,10 @@ public class FirmaCertService {
     }
 
     @Transactional
-    public void ligarFirmaCert(EventoModel evento , AutoridadModel autoridad ) {
+    public void ligarFirmaCert(CertificadoModel certificado, AutoridadModel autoridad ) {
         FirmaCertModel firmaCert = new FirmaCertModel();
         firmaCert.setAutoridad(autoridad);
-        firmaCert.setEvento(evento);
+        firmaCert.setCertificado(certificado);
+        firmaCertRepository.save(firmaCert);
     }
 }

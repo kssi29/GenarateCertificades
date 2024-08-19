@@ -35,9 +35,6 @@ public class EventoModel {
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<CertificadoModel> certificados = new ArrayList<>();
 
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List<FirmaCertModel> firmaCerts = new ArrayList<>();
-
 
 
 

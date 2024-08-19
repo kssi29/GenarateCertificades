@@ -17,12 +17,10 @@ public interface CertificadoRepository extends CrudRepository<CertificadoModel, 
        @Query("SELECT cert.participante FROM CertificadoModel cert WHERE cert.evento.idevento = :eventoId ")
        List<ParticipanteModel> findParticipantesByEventoId(@Param("eventoId") Long eventoId);
 
-       @Query("SELECT cert.participante FROM CertificadoModel cert WHERE cert.evento.idevento = :eventoId AND cert.participante.tipo = '0'")
-       List<ParticipanteModel> findAutoridadesByEventoId(@Param("eventoId") Long eventoId);
+       boolean existsByParticipante_IdpersonaAndEvento_Idevento(Long participanteId, Long eventoId);
 
-       
-       CertificadoModel findByEventoAndParticipante(EventoModel evento, ParticipanteModel participante);
-      
 
-      
+
+
+
 } 

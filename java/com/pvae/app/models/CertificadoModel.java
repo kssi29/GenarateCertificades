@@ -2,6 +2,8 @@ package com.pvae.app.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "certificado")
 public class CertificadoModel {
@@ -17,6 +19,11 @@ public class CertificadoModel {
     @ManyToOne
     @JoinColumn(name = "evento_id", referencedColumnName = "idevento")
     private EventoModel evento;
+
+    @OneToMany(mappedBy = "certificado")
+    private List<FirmaCertModel> firmaCerts;
+
+
 
 
 

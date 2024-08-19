@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pvae.app.models.AutoridadModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +16,12 @@ import com.pvae.app.models.UnidadModel;
 import com.pvae.app.repositories.CertificadoRepository;
 import com.pvae.app.servicies.EventoService;
 import com.pvae.app.servicies.UnidadService;
-import com.pvae.app.servicies.SubirArchivoService;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import com.pvae.app.repositories.FirmaCertRepository;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 
 
 @Controller
@@ -34,14 +32,16 @@ public class HomeController {
     private final UnidadService unidadService;
 
     private final String id = "id";
+    private final FirmaCertRepository firmaCertRepository;
+
 
 
     public HomeController(EventoService eventoService, CertificadoRepository certificadoRepository,
-                          UnidadService unidadService) {
+                          UnidadService unidadService, FirmaCertRepository firmaCertRepository) {
         this.eventoService = eventoService;
         this.certificadoRepository = certificadoRepository;
         this.unidadService = unidadService;
-
+        this.firmaCertRepository = firmaCertRepository;
     }
 
     private final String attributeNameTitulo = "titulo";
@@ -57,7 +57,6 @@ public class HomeController {
 
     @GetMapping("/crearSteps")
     public String crearSteps(Model model) {
-        System.out.println("Se presionó el botón de crear evento");
         EventoModel evento = new EventoModel();
         List<EventoModel> listaEventos = eventoService.listarEventos();
         List<UnidadModel> listaUnidades = unidadService.listarUnidades();
@@ -68,6 +67,8 @@ public class HomeController {
         return "steps";
     }
 
+
+
     @PostMapping("/guardarEvento")
     public String guardarEvento(
             @RequestParam("nombre") String nombre,
@@ -76,33 +77,33 @@ public class HomeController {
             Model model) {
 
         try {
-            EventoModel evento = new EventoModel();
-            evento.setNombre(nombre);
-
-            UnidadModel unidad = unidadService.buscarUnidad(unidadId);
-            evento.setUnidad(unidad);
-
-
-            EventoModel eventoGuardado = eventoService.guardarEvento(evento);
-
-            if (imagenFondo != null && !imagenFondo.isEmpty()) {
-                String directorioDestino = "C:/workspace/app/src/main/resources/static/Recursos/Fondos/";
-                String nombreArchivo = eventoGuardado.getIdevento() + "_" + imagenFondo.getOriginalFilename();
-                Path rutaCompleta = Paths.get(directorioDestino + nombreArchivo);
-                Files.write(rutaCompleta, imagenFondo.getBytes());
-
-                eventoGuardado.setImagenFondo(nombreArchivo);
-                eventoService.guardarEvento(eventoGuardado);
-            }
-
+            eventoService.guardarEventoConImagen(nombre, unidadId, imagenFondo);
             return "redirect:/";
-
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Hubo un problema al guardar el evento. Inténtalo de nuevo.");
             return "crear";
         }
     }
+
+    @PostMapping("/guardar")
+    public String guardar(
+            @RequestParam("idevento") Long idevento,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("unidadId") Long unidadId,
+            @RequestParam("imagenFondo") MultipartFile imagenFondo,
+            Model model) {
+
+        try {
+            eventoService.actualizarEventoConImagen(idevento, nombre, unidadId, imagenFondo);
+            return "redirect:/";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Hubo un problema al guardar el evento. Inténtalo de nuevo.");
+            return "crear";
+        }
+    }
+
 
 
     @PostMapping("/validarNombreEvento")
@@ -118,24 +119,31 @@ public class HomeController {
     public String editarUnidad(@PathVariable("id") Long idevento, Model model) {
 
         EventoModel evento = eventoService.buscarEvento(idevento);
+        List<UnidadModel> listaUnidades = unidadService.listarUnidades();
         List<EventoModel> listaEventos = eventoService.listarEventos();
-        model.addAttribute(attributeNameTitulo, "Editar Evento");
+        String titulo = "Editar " + evento.getNombre();
+        model.addAttribute(attributeNameTitulo, titulo);
         model.addAttribute(attributeNameEvento, evento);
+        model.addAttribute("unidades", listaUnidades);
         model.addAttribute("listaEventos", listaEventos);
+
         return "crear";
     }
 
     @GetMapping("/agregar/{id}")
     public String agregarParticipantes(@PathVariable("id") Long idevento, Model model) {
         EventoModel evento = eventoService.buscarEvento(idevento);
-        model.addAttribute("titulo", "Agregar partipantes a: " + evento.getNombre());
+        model.addAttribute("titulo", "Agregar partipantes : " + evento.getNombre());
         model.addAttribute("evento", evento);
+        List<AutoridadModel> listaAutoridades = firmaCertRepository.findAutoridadesByEventoId(evento.getIdevento());
+        model.addAttribute("listaAutoridades", listaAutoridades);
         return "agregar";
     }
 
 
+
     @GetMapping("/eliminar/{id}")
-    public String eliminarUnidad(@PathVariable("id") Long idevento, Model model) {
+    public String eliminarUnidad(@PathVariable("id") Long idevento) {
         eventoService.eliminarEvento(idevento);
         return "redirect:/";
     }
@@ -150,21 +158,16 @@ public class HomeController {
 
     @PostMapping("/excelP/{eventoId}")
     public String manejaSubidaExcel(@RequestParam("archivo") MultipartFile archivo,
-                                    @PathVariable("eventoId") Long eventoId, Model model) {
+                                    @PathVariable("eventoId") Long eventoId, Model model){
         if (archivo.isEmpty()) {
             model.addAttribute("error", "Archivo vacío");
             return "redirect:/agregar/" + eventoId;
         }
-        String resultadoProcesamiento = eventoService.procesarYGuardarExcel(archivo, eventoId, model);
-        if (resultadoProcesamiento.startsWith("Error")) {
-            model.addAttribute("error", resultadoProcesamiento);
+        if (eventoService.procesarYGuardarExcel(archivo, eventoId, model)) {
+            return "redirect:/agregar/" + eventoId + "#step2";
+        } else {
             return "redirect:/agregar/" + eventoId;
         }
-
-
-
-        return "redirect:/agregar/" + eventoId + "#step2";
-
     }
 
 }

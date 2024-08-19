@@ -34,7 +34,6 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Pertenece</th>
                                             <th>Acciones</th>
@@ -43,7 +42,6 @@
                                     <tbody>
                                         <!-- Iterar sobre cada unidad y mostrar en la tabla -->
                                         <tr th:each="unidad : ${listaUnidades}">
-                                            <td th:text="${unidad.idunidad}"></td>
                                             <td th:text="${unidad.nombre}"></td>
                                             <td
                                                 th:text="${unidad.unidadPadre != null ? unidad.unidadPadre.nombre : 'Ninguno'}">
@@ -60,6 +58,7 @@
                                                 <a th:href="@{/consultas/unidades/eliminar/{idunidad}(idunidad=${unidad.idunidad})}"
                                                     class="btn btn-danger btn-circle btn-sm">
                                                     <i class="fas fa-trash"></i>
+                                                </a>
 
                                             </td>
                                         </tr>
@@ -92,5 +91,5 @@
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
-
+</body>
 </html>

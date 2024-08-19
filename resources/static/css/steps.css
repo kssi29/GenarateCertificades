@@ -89,7 +89,6 @@ button:focus,
 
 .wizard > div.wizard-inner {
     position: relative;
-    margin-bottom: 50px;
     text-align: center;
 }
 
@@ -97,7 +96,7 @@ button:focus,
     height: 2px;
     background: #e0e0e0;
     position: absolute;
-    width: 57%;
+    width: 50%;
     margin: 0 auto;
     left: 0;
     right: 0;

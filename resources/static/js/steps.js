@@ -11,7 +11,6 @@ $(document).ready(function () {
             return false;
         }
     });
-    // Detect hash in URL and open the corresponding tab
     if(window.location.hash) {
         var hash = window.location.hash;
         var activeTab = $('.wizard .nav-tabs li a[href="' + hash + '"]');
@@ -108,6 +107,12 @@ function validoPaso1() {
         },
         error: function(xhr, status, error) {
             alert('Hubo un error en la validación. Intenta nuevamente.');
+        }
+    });
+
+    $(document).on('keydown', 'input, select', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
         }
     });
 }
